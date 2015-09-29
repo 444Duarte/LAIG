@@ -28,6 +28,7 @@ MySceneGraph.prototype.onXMLReady=function()
 	
 	// Here should go the calls for different functions to parse the various blocks
 	var error = this.parseGlobalsExample(rootElement);
+	error = this.parseInitials(rootElement);
 
 	if (error != null) {
 		this.onXMLError(error);
@@ -82,6 +83,51 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 		this.list[e.id]=e.attributes.getNamedItem("coords").value;
 		console.log("Read list item id "+ e.id+" with value "+this.list[e.id]);
 	};
+
+};
+
+
+MySceneGraph.prototype.parseInitials= function(rootElement){
+	var elems =  rootElement.getElementsByTagName('INITIALS');
+	if (elems == null) {
+		return "initials element is missing.";
+	}
+
+	if (elems.length != 1) {
+		return "either zero or more than one 'INITIALS' element found.";
+	}
+
+	var initials = elems[0];
+	
+	var frustum = initials.getElementsByTagName('frustum');
+	if(frustum == null)	return "frustum element missing";
+	this.frustum = [];
+	this.frustum[0] = this.reader.getFloat(frustum, 'near', true);
+	this.frustum[1] = this.reader.getFloat(frustum, 'far', true);
+
+	var translate = initials.getElementsByTagName('translate');
+	if(translate == null) return "translate element missing";
+	this.translate = [];
+	this.translate[0] = this.reader.getFloat(translate, 'x', true);
+	this.translate[1] = this.reader.getFloat(translate, 'y', true);
+	this.translate[2] = this.reader.getFloat(translate, 'z', true);
+
+	var rotation = initials.getElementsByTagName('rotation');
+	if (rotation.length != 3) return "initial rotations not correct";
+	this.rotation = [];
+	var rotationX = [];
+	rotationX[0] = this.reader.getString(rotation[0], 'axis', true);
+	rotationX[1] = this.reader.getFloat(rotation[0], 'angle', true);
+	this.rotation[0] = rotationX;
+	var rotationY = [];
+	rotationY[0] = this.reader.getString(rotation[1], 'axis', true);
+	rotationY[1] = this.reader.getFloat(rotation[1], 'angle', true);
+	this.rotation[1] = rotationY;
+	var rotationZ = [];
+	rotationZ[0] = this.reader.getString(rotation[2], 'axis', true);
+	rotationZ[1] = this.reader.getFloat(rotation[2], 'angle', true);
+	this.rotation[2] = rotationZ;	
+
 
 };
 	
