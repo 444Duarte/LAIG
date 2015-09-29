@@ -637,7 +637,7 @@
 	        <TRANSLATION x="4" y="1.5" z="4" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
-	            <DESCENDANT id="tampo_cadeira" />       <!-- "ss" is the identifier of a node or of leaf; -->
+	            <DESCENDANT id="tampo_cadeira " />       <!-- "ss" is the identifier of a node or of leaf; -->
 	                                         <!-- may be repeatad as necessary. It can refer an -->
 	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
 	            <DESCENDANT id="perna_cadeira1" />
