@@ -44,7 +44,7 @@
 
 
 	<MATERIALS>
-	    <MATERIAL id="ss">                                  
+	    <MATERIAL id="material1">                                  
 	        <shininess value="ff" />
 	        <specular r="ff" g="ff" b="ff" a="ff" />        <!-- specular reflection -->
 	        <diffuse r="ff" g="ff" b="ff" a="ff" />         <!-- diffuse reflection -->
@@ -60,10 +60,10 @@
 	<LEAVES>
 
 	    <!-- next lines define nodes of type leaf; they may be repeated, in any order, as necessary -->
-	    <LEAF id="ss" type="rectangle" args="ff ff ff ff" />
-	    <LEAF id="ss" type="cylinder" args="ff ff ff ii ii" /> 
-	    <LEAF id="ss" type="sphere" args="ff ii ii" />
-	    <LEAF id="ss" type="triangle" args="ff ff ff  ff ff ff  ff ff ff" />
+	    <LEAF id="rect" type="rectangle" args="0 1 1 0" />
+	    <LEAF id="cyl" type="cylinder" args="3 2 1 10 10" /> 
+	    <LEAF id="sphere" type="sphere" args="1 15 15" />
+	    <LEAF id="tri" type="triangle" args="0 0 0  0 1 0  0 0.5 1" />
 
 	    <!-- Parameters of the above primitives:                                                         -->
 	        <!--rectangle: 2D coordinates for left-top and right-bottom vertices.                        -->
