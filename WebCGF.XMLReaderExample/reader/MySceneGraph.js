@@ -126,8 +126,14 @@ MySceneGraph.prototype.parseInitials= function(rootElement){
 	var rotationZ = [];
 	rotationZ[0] = this.reader.getString(rotation[2], 'axis', true);
 	rotationZ[1] = this.reader.getFloat(rotation[2], 'angle', true);
-	this.rotation[2] = rotationZ;	
+	this.rotation[2] = rotationZ;
 
+	var scale = initials.getElementsByTagName('scale');
+	this.scale = [];
+	this.scale[0] = this.reader.getFloat(scale, 'sx', true);
+	this.scale[1] = this.reader.getFloat(scale, 'sy', true);
+	this.scale[2] = this.reader.getFloat(scale, 'sz', true);
+	
 
 };
 	
