@@ -7,7 +7,6 @@
 	
 	this.slices=slices;
 
-
  	this.initBuffers();
  };
 
@@ -27,8 +26,8 @@
 		this.texCoords.push(Math.cos(slice * alpha)/2+0.5, 0.5 - Math.sin(slice * alpha)/2);
 	}
 
-	for (var slice = 0; slice < (this.slices - 1); ++slice) {
-		this.indices.push( 0, slice, slice + 1);
+	for (var slice = 0; slice < (this.slices - 2); ++slice) {
+		this.indices.push( 0, slice + 1, slice + 2);
 	}
 		
  	this.primitiveType = this.scene.gl.TRIANGLES;
