@@ -128,7 +128,7 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-
+	        <ROTATION axis="y" angle="180">
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
@@ -172,7 +172,9 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <ROTATION axis="x" angle="-90" />
+	        <TRANSLATION x="0" y="-1" z="0"/>
+	        <ROTATION axis="x" angle="-90"/>
+	        <TRANSLATION x="0" y="1" z="0"/>
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="rect" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -215,7 +217,9 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
+	        <TRANSLATION x="-1" y="0" z="0"/>
 	        <ROTATION axis="y" angle="90" />
+	        <TRANSLATION x="1" y="0" z="0"/>
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="rect" />       <!-- "ss" is the identifier of a node or of leaf; -->
