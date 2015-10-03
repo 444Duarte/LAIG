@@ -102,15 +102,15 @@ MySceneGraph.prototype.parseInitials= function(rootElement){
 	var frustum = initials.getElementsByTagName('frustum');
 	if(frustum == null)	return "frustum element missing in INITIALS";
 	this.frustum = [];
-	this.frustum[0] = this.reader.getFloat(frustum, 'near', true);
-	this.frustum[1] = this.reader.getFloat(frustum, 'far', true);
+	this.frustum[0] = this.reader.getFloat(frustum[0], 'near', true);
+	this.frustum[1] = this.reader.getFloat(frustum[0], 'far', true);
 
 	var translate = initials.getElementsByTagName('translate');
 	if(translate == null) return "translate element missing in INITIALS";
 	this.translate = [];
-	this.translate[0] = this.reader.getFloat(translate, 'x', true);
-	this.translate[1] = this.reader.getFloat(translate, 'y', true);
-	this.translate[2] = this.reader.getFloat(translate, 'z', true);
+	this.translate[0] = this.reader.getFloat(translate[0], 'x', true);
+	this.translate[1] = this.reader.getFloat(translate[0], 'y', true);
+	this.translate[2] = this.reader.getFloat(translate[0], 'z', true);
 
 	var rotation = initials.getElementsByTagName('rotation');
 	if (rotation.length != 3) return "rotation elements in INITIALS not correct. Number of elements 'rotation' must be three.";
@@ -130,7 +130,7 @@ MySceneGraph.prototype.parseInitials= function(rootElement){
 	
 	var reference = this.initials.getElementsByTagName('reference');
 	if (reference == null) return "reference element missing in INITIALS";
-	this.reference = this.reader.getFloat(reference,'length', true);	
+	this.reference = this.reader.getFloat(reference[0],'length', true);	
 
 };
 	
@@ -139,9 +139,9 @@ MySceneGraph.prototype.parseIlumination= function(rootElement){
 	var ilumation = rootElement.getElementsByTagName('ILLUMINATION');
 	if (ilumation == null) return "ILLUMINATION element is missing.";
 
-	if (ilumation.length != 2) return "number of elements in 'ILLUMINATION' different from two.";
+	if (ilumation[0].children.length != 2) return "number of elements in 'ILLUMINATION' different from two.";
 	
-	var ambient = ilumation.getElementsByTagName('ambient');
+	var ambient = ilumation[0].getElementsByTagName('ambient');
 	if (ambient == null) return "ambient element missing in ILLUMINATION";
 	this.ambientLight = [];
 	this.ambientLight[0] = this.reader.getFloat(ambient,'r', true);
@@ -157,7 +157,7 @@ MySceneGraph.prototype.parseIlumination= function(rootElement){
 
 
 
-	var background = ilumation.getElementsByTagName('background');
+	var background = ilumation[0].getElementsByTagName('background');
 	if (background == null) return "'background' element missing in ILLUMINATION";
 	this.backgroundLight = [];
 
@@ -172,6 +172,32 @@ MySceneGraph.prototype.parseIlumination= function(rootElement){
 
 	this.backgroundLight[3] = this.reader.getFloat(background,'a', true);
 	if(backgroundLight[3] > 1 || backgroundLight[3]<0) return "'a' attribute in 'background' must be between 0 and 1.";
+
+}
+
+MySceneGraph.prototype.parseTextures= function(rootElement){
+	var texturesElement = rootElement.getElementsByTagName('TEXTURES');
+	if (texturesElement == null) return "TEXTURES element is missing.";
+	var textureNode = texturesElement[0].getElementsByTagName('TEXTURE');
+	var numberTextures = textureNode.length;
+	if (numberTextures < 1) return "number of 'TEXTURE' elements in 'TEXTURES' must be at least 1.";
+
+	this.textures = [];
+	
+
+	for(var i = 0; i < numberTextures; i++){
+		var id = this.reader.getString(textureNode[i], 'id',true);
+
+		var file = textureNode[i].getElementsByTagName('path');
+		if (file == null) return "'file' element missing in TEXTURE id = " + id;
+		var path = this.reader.getString(file[0], 'path', true);
+
+		var amplifFactor = textureNode[i].getElementsByTagName('amplif_factor');
+		if (amplifFactor == null) return "'amplif_factor' element missing in TEXTURE id = " + id;
+		var s = this.reader.getString(amplifFactor[0], 's', true);
+		var t = this.reader.getString(amplifFactor[0], 't', true);
+		textures[1] = new MyTexture(this, path, s, t);
+	}
 
 }
 
