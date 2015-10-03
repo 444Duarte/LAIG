@@ -88,6 +88,7 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 
 
 MySceneGraph.prototype.parseInitials= function(rootElement){
+	//TODO add console.logs
 	var elems =  rootElement.getElementsByTagName('INITIALS');
 	if (elems == null) {
 		return "initials element is missing in INITIALS.";
@@ -136,23 +137,26 @@ MySceneGraph.prototype.parseInitials= function(rootElement){
 	
 
 MySceneGraph.prototype.parseIlumination= function(rootElement){
+	//TODO add console.logs
 	var ilumation = rootElement.getElementsByTagName('ILLUMINATION');
 	if (ilumation == null) return "ILLUMINATION element is missing.";
 
 	if (ilumation[0].children.length != 2) return "number of elements in 'ILLUMINATION' different from two.";
 	
+
 	var ambient = ilumation[0].getElementsByTagName('ambient');
 	if (ambient == null) return "ambient element missing in ILLUMINATION";
 	this.ambientLight = [];
-	this.ambientLight[0] = this.reader.getFloat(ambient,'r', true);
+	this.ambientLight[0] = this.reader.getFloat(ambient[0],'r', true);
 	if(ambientLight[0] > 255 || ambientLight[0] < 0) return "'r' attribute in 'ambient' must be between 0 and 255.";
 
-	this.ambientLight[1] = this.reader.getFloat(ambient,'g', true);
+	this.ambientLight[1] = this.reader.getFloat(ambient[0],'g', true);
 	if(ambientLight[1] > 255 || ambientLight[1] < 0) return "'r' attribute in 'ambient' must be between 0 and 255.";
 
-	this.ambientLight[2] = this.reader.getFloat(ambient,'b', true);
+	this.ambientLight[2] = this.reader.getFloat(ambient[0],'b', true);
 	if(ambientLight[2] > 255 || ambientLight[2] < 0) return "'r' attribute in 'ambient' must be between 0 and 255.";
-	this.ambientLight[3] = this.reader.getFloat(ambient,'a', true);
+	
+	this.ambientLight[3] = this.reader.getFloat(ambient[0],'a', true);
 	if(ambientLight[3] > 1 || ambientLight[3]<0) return "'a' attribute in 'ambient' must be between 0 and 1.";
 
 
@@ -161,21 +165,22 @@ MySceneGraph.prototype.parseIlumination= function(rootElement){
 	if (background == null) return "'background' element missing in ILLUMINATION";
 	this.backgroundLight = [];
 
-	this.backgroundLight[0] = this.reader.getFloat(background,'r', true);
+	this.backgroundLight[0] = this.reader.getFloat(background[0],'r', true);
 	if(backgroundLight[0] > 255 || backgroundLight[0] < 0) return "'r' attribute in 'background' must be between 0 and 255.";
 
-	this.backgroundLight[1] = this.reader.getFloat(background,'g', true);
+	this.backgroundLight[1] = this.reader.getFloat(background[0],'g', true);
 	if(backgroundLight[1] > 255 || backgroundLight[1] < 0) return "'g' attribute in 'background' must be between 0 and 255.";
 
-	this.backgroundLight[2] = this.reader.getFloat(background,'b', true);
+	this.backgroundLight[2] = this.reader.getFloat(background[0],'b', true);
 	if(backgroundLight[2] > 255 || backgroundLight[2] < 0) return "'b' attribute in 'background' must be between 0 and 255.";
 
-	this.backgroundLight[3] = this.reader.getFloat(background,'a', true);
+	this.backgroundLight[3] = this.reader.getFloat(background[0],'a', true);
 	if(backgroundLight[3] > 1 || backgroundLight[3]<0) return "'a' attribute in 'background' must be between 0 and 1.";
 
 }
 
 MySceneGraph.prototype.parseTextures= function(rootElement){
+	//TODO add console.logs
 	var texturesElement = rootElement.getElementsByTagName('TEXTURES');
 	if (texturesElement == null) return "TEXTURES element is missing.";
 	var textureNode = texturesElement[0].getElementsByTagName('TEXTURE');
@@ -200,6 +205,106 @@ MySceneGraph.prototype.parseTextures= function(rootElement){
 	}
 
 }
+
+MySceneGraph.prototype.parseMaterials= function(rootElement){
+	var materialsElement = rootElement.getElementsByTagName('MATERIALS');
+	if (materialsElement == null) return "MATERIALS element is missing.";
+	var materialNode = materialsElement[0].getElementsByTagName('MATERIAL');
+	var numberMaterials = textureNode.length;
+	if (numberTextures < 1) return "number of 'MATERIAL' elements in 'MATERIALS' must be at least 1.";
+
+	this.materials = [];
+
+	for(var i = 0; i < numberMaterials; i++){
+		var id = this.reader.getString(materialNode[i], 'id',true);
+		
+		var shininessElem = materialNode[i].getElementsByTagName('shininess');
+		if (shininessElem == null) return "'shininess' element missing in MATERIAL id = " + id;
+		var shininess = this.reader.getFloat(shininessElem[0], 'value', true);
+
+
+
+		var specularElem = materialNode[i].getElementsByTagName('specular');
+		if (specularElem == null) return "'specular' element missing in MATERIAL id = " + id;
+		this.specular = [];
+
+		this.specular[0] = this.reader.getFloat(specularElem[0],'r', true);
+		if(specular[0] > 255 || specular[0] < 0) return "'r' attribute in 'specular' must be between 0 and 255.";
+
+		this.specular[1] = this.reader.getFloat(specularElem[0],'g', true);
+		if(specular[1] > 255 || specular[1] < 0) return "'g' attribute in 'specular' must be between 0 and 255.";
+
+		this.specular[2] = this.reader.getFloat(specularElem[0],'b', true);
+		if(specular[2] > 255 || specular[2] < 0) return "'b' attribute in 'specular' must be between 0 and 255.";
+
+		this.specular[3] = this.reader.getFloat(specularElem[0],'a', true);
+		if(specular[3] > 1 || specular[3]<0) return "'a' attribute in 'specular' must be between 0 and 1.";
+
+
+
+		var diffuseElem = materialNode[i].getElementsByTagName('diffuse');
+		if (diffuseElem == null) return "'diffuse' element missing in MATERIAL id = " + id;
+		this.diffuse = [];
+
+		this.diffuse[0] = this.reader.getFloat(diffuseElem[0],'r', true);
+		if(diffuse[0] > 255 || diffuse[0] < 0) return "'r' attribute in 'diffuse' must be between 0 and 255.";
+
+		this.diffuse[1] = this.reader.getFloat(diffuseElem[0],'g', true);
+		if(diffuse[1] > 255 || diffuse[1] < 0) return "'g' attribute in 'diffuse' must be between 0 and 255.";
+
+		this.diffuse[2] = this.reader.getFloat(diffuseElem[0],'b', true);
+		if(diffuse[2] > 255 || diffuse[2] < 0) return "'b' attribute in 'diffuse' must be between 0 and 255.";
+
+		this.diffuse[3] = this.reader.getFloat(diffuseElem[0],'a', true);
+		if(diffuse[3] > 1 || diffuse[3]<0) return "'a' attribute in 'diffuse' must be between 0 and 1.";
+
+
+
+		var ambientElem = materialNode[i].getElementsByTagName('ambient');
+		if (ambientElem == null) return "'ambient' element missing in MATERIAL id = " + id;
+		this.ambient = [];
+
+		this.ambient[0] = this.reader.getFloat(ambientElem[0],'r', true);
+		if(ambient[0] > 255 || ambient[0] < 0) return "'r' attribute in 'ambient' must be between 0 and 255.";
+
+		this.ambient[1] = this.reader.getFloat(ambientElem[0],'g', true);
+		if(ambient[1] > 255 || ambient[1] < 0) return "'g' attribute in 'ambient' must be between 0 and 255.";
+
+		this.ambient[2] = this.reader.getFloat(ambientElem[0],'b', true);
+		if(ambient[2] > 255 || ambient[2] < 0) return "'b' attribute in 'ambient' must be between 0 and 255.";
+
+		this.ambient[3] = this.reader.getFloat(ambientElem[0],'a', true);
+		if(ambient[3] > 1 || ambient[3]<0) return "'a' attribute in 'ambient' must be between 0 and 1.";
+
+
+
+		var emissionElem = materialNode[i].getElementsByTagName('emission');
+		if (emissionElem == null) return "'emission' element missing in MATERIAL id = " + id;
+		this.emission = [];
+
+		this.emission[0] = this.reader.getFloat(emissionElem[0],'r', true);
+		if(emission[0] > 255 || emission[0] < 0) return "'r' attribute in 'emission' must be between 0 and 255.";
+
+		this.emission[1] = this.reader.getFloat(emissionElem[0],'g', true);
+		if(emission[1] > 255 || emission[1] < 0) return "'g' attribute in 'emission' must be between 0 and 255.";
+
+		this.emission[2] = this.reader.getFloat(emissionElem[0],'b', true);
+		if(emission[2] > 255 || emission[2] < 0) return "'b' attribute in 'emission' must be between 0 and 255.";
+
+		this.emission[3] = this.reader.getFloat(emissionElem[0],'a', true);
+		if(emission[3] > 1 || emission[3]<0) return "'a' attribute in 'emission' must be between 0 and 1.";
+
+	
+		var newMaterial = new MyMaterial(this, id);
+		newMaterial.setShininess(shininess);
+		newMaterial.setSpecular(specular[0], specular[1], specular[2], specular[3]);
+		newMaterial.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
+		newMaterial.setEmission(emission[0], emission[1], emission[2], emission[3]);
+
+		this.materials[i] = newMaterial;
+	}
+}
+
 
 /*
  * Callback to be executed on any read error
