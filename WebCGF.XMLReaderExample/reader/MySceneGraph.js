@@ -90,7 +90,7 @@ MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
 MySceneGraph.prototype.parseInitials= function(rootElement){
 	var elems =  rootElement.getElementsByTagName('INITIALS');
 	if (elems == null) {
-		return "initials element is missing.";
+		return "initials element is missing in INITIALS.";
 	}
 
 	if (elems.length != 1) {
@@ -100,20 +100,20 @@ MySceneGraph.prototype.parseInitials= function(rootElement){
 	var initials = elems[0];
 	
 	var frustum = initials.getElementsByTagName('frustum');
-	if(frustum == null)	return "frustum element missing";
+	if(frustum == null)	return "frustum element missing in INITIALS";
 	this.frustum = [];
 	this.frustum[0] = this.reader.getFloat(frustum, 'near', true);
 	this.frustum[1] = this.reader.getFloat(frustum, 'far', true);
 
 	var translate = initials.getElementsByTagName('translate');
-	if(translate == null) return "translate element missing";
+	if(translate == null) return "translate element missing in INITIALS";
 	this.translate = [];
 	this.translate[0] = this.reader.getFloat(translate, 'x', true);
 	this.translate[1] = this.reader.getFloat(translate, 'y', true);
 	this.translate[2] = this.reader.getFloat(translate, 'z', true);
 
 	var rotation = initials.getElementsByTagName('rotation');
-	if (rotation.length != 3) return "initial rotations not correct";
+	if (rotation.length != 3) return "rotation elements in INITIALS not correct. Number of elements 'rotation' must be three.";
 	this.rotation = [];
 	var rotation1 = [];
 	rotation1[0] = this.reader.getString(rotation[0], 'axis', true);
@@ -129,11 +129,52 @@ MySceneGraph.prototype.parseInitials= function(rootElement){
 	this.rotation[2] = rotation3;	
 	
 	var reference = this.initials.getElementsByTagName('reference');
-	if (reference == null) return 'reference element missing'
+	if (reference == null) return "reference element missing in INITIALS";
 	this.reference = this.reader.getFloat(reference,'length', true);	
 
 };
 	
+
+MySceneGraph.prototype.parseIlumination= function(rootElement){
+	var ilumation = rootElement.getElementsByTagName('ILLUMINATION');
+	if (ilumation == null) return "ILLUMINATION element is missing.";
+
+	if (ilumation.length != 2) return "number of elements in 'ILLUMINATION' different from two.";
+	
+	var ambient = ilumation.getElementsByTagName('ambient');
+	if (ambient == null) return "ambient element missing in ILLUMINATION";
+	this.ambientLight = [];
+	this.ambientLight[0] = this.reader.getFloat(ambient,'r', true);
+	if(ambientLight[0] > 255 || ambientLight[0] < 0) return "'r' attribute in 'ambient' must be between 0 and 255.";
+
+	this.ambientLight[1] = this.reader.getFloat(ambient,'g', true);
+	if(ambientLight[1] > 255 || ambientLight[1] < 0) return "'r' attribute in 'ambient' must be between 0 and 255.";
+
+	this.ambientLight[2] = this.reader.getFloat(ambient,'b', true);
+	if(ambientLight[2] > 255 || ambientLight[2] < 0) return "'r' attribute in 'ambient' must be between 0 and 255.";
+	this.ambientLight[3] = this.reader.getFloat(ambient,'a', true);
+	if(ambientLight[3] > 1 || ambientLight[3]<0) return "'a' attribute in 'ambient' must be between 0 and 1.";
+
+
+
+	var background = ilumation.getElementsByTagName('background');
+	if (background == null) return "'background' element missing in ILLUMINATION";
+	this.backgroundLight = [];
+
+	this.backgroundLight[0] = this.reader.getFloat(background,'r', true);
+	if(backgroundLight[0] > 255 || backgroundLight[0] < 0) return "'r' attribute in 'background' must be between 0 and 255.";
+
+	this.backgroundLight[1] = this.reader.getFloat(background,'g', true);
+	if(backgroundLight[1] > 255 || backgroundLight[1] < 0) return "'g' attribute in 'background' must be between 0 and 255.";
+
+	this.backgroundLight[2] = this.reader.getFloat(background,'b', true);
+	if(backgroundLight[2] > 255 || backgroundLight[2] < 0) return "'b' attribute in 'background' must be between 0 and 255.";
+
+	this.backgroundLight[3] = this.reader.getFloat(background,'a', true);
+	if(backgroundLight[3] > 1 || backgroundLight[3]<0) return "'a' attribute in 'background' must be between 0 and 1.";
+
+}
+
 /*
  * Callback to be executed on any read error
  */
