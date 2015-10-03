@@ -115,19 +115,22 @@ MySceneGraph.prototype.parseInitials= function(rootElement){
 	var rotation = initials.getElementsByTagName('rotation');
 	if (rotation.length != 3) return "initial rotations not correct";
 	this.rotation = [];
-	var rotationX = [];
-	rotationX[0] = this.reader.getString(rotation[0], 'axis', true);
-	rotationX[1] = this.reader.getFloat(rotation[0], 'angle', true);
-	this.rotation[0] = rotationX;
-	var rotationY = [];
-	rotationY[0] = this.reader.getString(rotation[1], 'axis', true);
-	rotationY[1] = this.reader.getFloat(rotation[1], 'angle', true);
-	this.rotation[1] = rotationY;
-	var rotationZ = [];
-	rotationZ[0] = this.reader.getString(rotation[2], 'axis', true);
-	rotationZ[1] = this.reader.getFloat(rotation[2], 'angle', true);
-	this.rotation[2] = rotationZ;	
-
+	var rotation1 = [];
+	rotation1[0] = this.reader.getString(rotation[0], 'axis', true);
+	rotation1[1] = this.reader.getFloat(rotation[0], 'angle', true);
+	this.rotation[0] = rotation1;
+	var rotation2 = [];
+	rotation2[0] = this.reader.getString(rotation[1], 'axis', true);
+	rotation2[1] = this.reader.getFloat(rotation[1], 'angle', true);
+	this.rotation[1] = rotation2;
+	var rotation3 = [];
+	rotation3[0] = this.reader.getString(rotation[2], 'axis', true);
+	rotation3[1] = this.reader.getFloat(rotation[2], 'angle', true);
+	this.rotation[2] = rotation3;	
+	
+	var reference = this.initials.getElementsByTagName('reference');
+	if (reference == null) return 'reference element missing'
+	this.reference = this.reader.getFloat(reference,'length', true);	
 
 };
 	
