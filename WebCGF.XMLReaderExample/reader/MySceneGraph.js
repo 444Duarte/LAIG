@@ -191,6 +191,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement){
 	
 
 	for(var i = 0; i < numberTextures; i++){
+		//TODO verificar se isto é necessário fazer ou se basta aceder ao atributo 'id' usando 'textureNode[i].id'
 		var id = this.reader.getString(textureNode[i], 'id',true);
 
 		var file = textureNode[i].getElementsByTagName('path');
@@ -201,7 +202,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement){
 		if (amplifFactor == null) return "'amplif_factor' element missing in TEXTURE id = " + id;
 		var s = this.reader.getString(amplifFactor[0], 's', true);
 		var t = this.reader.getString(amplifFactor[0], 't', true);
-		textures[1] = new MyTexture(this, path, s, t);
+		textures[id] = new MyTexture(this, id, path, s, t);
 	}
 
 }
@@ -210,12 +211,13 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 	var materialsElement = rootElement.getElementsByTagName('MATERIALS');
 	if (materialsElement == null) return "MATERIALS element is missing.";
 	var materialNode = materialsElement[0].getElementsByTagName('MATERIAL');
-	var numberMaterials = textureNode.length;
+	var numberMaterials = materialNode.length;
 	if (numberTextures < 1) return "number of 'MATERIAL' elements in 'MATERIALS' must be at least 1.";
 
 	this.materials = [];
 
 	for(var i = 0; i < numberMaterials; i++){
+		//TODO verificar se isto é necessário fazer ou se basta aceder ao atributo 'id' usando 'materialNode[i].id'
 		var id = this.reader.getString(materialNode[i], 'id',true);
 		
 		var shininessElem = materialNode[i].getElementsByTagName('shininess');
@@ -301,10 +303,19 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 		newMaterial.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
 		newMaterial.setEmission(emission[0], emission[1], emission[2], emission[3]);
 
-		this.materials[i] = newMaterial;
+		this.materials[id] = newMaterial;
 	}
 }
 
+
+MySceneGraph.prototype.parseMaterials= function(rootElement){
+	var lightElement = rootElement.getElementsByTagName('LIGHTS');
+	if (lightElement == null) return "LIGHTS element is missing.";
+	var lightNode = materialsElement[0].getElementsByTagName('LIGHT');
+	var numberLights = lightNode.length;
+	if (numberLights < 1) return "number of 'LIGHT' elements in 'LIGHTS' must be at least 1.";
+	//TODO acabar
+}
 
 /*
  * Callback to be executed on any read error
