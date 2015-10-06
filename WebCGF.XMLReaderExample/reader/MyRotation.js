@@ -1,15 +1,13 @@
-function MyTransformation(scene) {
+function MyRotation(scene) {
  	CGFobject.call(this,scene);
 	
  };
 
- MyTransformation.prototype = Object.create(CGFobject.prototype);
- MyTransformation.prototype.constructor = MyTransformation;
+ MyRotation.prototype = Object.create(MyTransformation.prototype);
+ MyRotation.prototype.constructor = MyRotation;
 
- MyTransformation.prototype.apply = function();
-
- MyTransformation.prototype.rotation = function(axis, degree){
-
+ MyRotation.prototype.apply = function(){
+ 	
  	var deg2rad = degree * Math.PI / 180;
  	var vecEixo[];
 
@@ -30,4 +28,5 @@ function MyTransformation(scene) {
  	}
 
  	this.scene.rotate(deg2rad, vecEixo[0], vecEixo[1], vecEixo[2]);
+
  };
