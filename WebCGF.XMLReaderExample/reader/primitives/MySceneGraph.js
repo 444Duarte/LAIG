@@ -211,7 +211,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 }
 
 
-MySceneGraph.prototype.parseMaterials= function(rootElement){
+MySceneGraph.prototype.parseLights= function(rootElement){
 	var lightElement = rootElement.getElementsByTagName('LIGHTS');
 	if (lightElement == null) return "LIGHTS element is missing.";
 	var lightNode = materialsElement[0].getElementsByTagName('LIGHT');
@@ -221,7 +221,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 	for(var i = 0; i <numberLights; i++){
 		var id = lightNode[i].id;
 		var enable = this.reader.getBoolean(lightNode[i], 'enable', true);
-		var position = parsePosition(lightNode[i], 'position', 'LIGHT');
+		var position = parseLightPosition(lightNode[i], 'position', 'LIGHT');
 		var ambient = parseRGBA(lightNode[i], 'ambient', 'LIGHT');
 		var diffuse = parseRGBA(lightNode[i], 'diffuse', 'LIGHT');
 		var specular = parseRGBA(lightNode[i], 'specular', 'LIGHT');
@@ -239,7 +239,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 	}
 }
 
-MySceneGraph.prototype.parsePosition= function(node, element,nodeName){
+MySceneGraph.prototype.parseLightPosition= function(node, element,nodeName){
 	var element = node.getElementsByTagName(element);
 	if (element == null) return "'" + element + "' element missing in " + nodeName + " id = " + node.id;
 	var position = [];
@@ -278,6 +278,7 @@ MySceneGraph.prototype.parseRGBA= function(node, element, nodeName){
 
 	return rgba;
 }
+
 
 /*
  * Callback to be executed on any read error
