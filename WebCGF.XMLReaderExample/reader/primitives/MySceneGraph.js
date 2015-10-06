@@ -6,6 +6,8 @@ function MySceneGraph(filename, scene) {
 	this.scene = scene;
 	scene.graph=this;
 		
+
+
 	// File reading 
 	this.reader = new CGFXMLreader();
 
@@ -136,9 +138,6 @@ MySceneGraph.prototype.parseInitials= function(rootElement){
 	
 
 };
-	
-<<<<<<< HEAD
-=======
 
 MySceneGraph.prototype.parseIlumination= function(rootElement){
 	//TODO add console.logs
@@ -283,8 +282,6 @@ MySceneGraph.prototype.parseRGBA= function(node, element, nodeName){
 	return rgba;
 }
 
-
->>>>>>> 366e35d4e8de79ca916c50f6f53bb255e9db2844
 /*
  * Callback to be executed on any read error
  */
