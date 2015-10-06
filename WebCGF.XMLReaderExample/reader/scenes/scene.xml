@@ -48,6 +48,10 @@
 	        <amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
 	    </TEXTURE>
 
+	    <TEXTURE id="wall">
+	        <file path="resources/wall.jpg" />                             <!-- path to file -->
+	        <amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
+	    </TEXTURE>
 	    <!-- NOTE: this block "TEXTURE" must be repeated as necessary with different "id" -->
 	    
 	</TEXTURES>
@@ -131,6 +135,8 @@
 	            <DESCENDANT id="torre" />
 	            <DESCENDANT id="teclado" />
 	            <DESCENDANT id="monitor" />
+	            <DESCENDANT id="left wall"/>
+	            <DESCENDANT id="front wall"/>
 
 	        </DESCENDANTS>
 
@@ -735,7 +741,7 @@
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 
-	         <TRANSLATION x="2" y="0" z="0.5" />
+	         <TRANSLATION x="2" y="0" z="1.5" />
 	        <SCALE sx="2" sy="2" sz="0.1" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
@@ -746,6 +752,51 @@
 
 	    </NODE>
 
+	    <NODE id="left wall">       <!--   defines one intermediate node; may be repeated as necessary -->
+
+	        <!-- next two lines are mandatory -->
+	        <MATERIAL id="default" />      <!-- declared material superimposes the material received from parent node -->
+	                                  <!-- id="null" maintains material from parent node        -->
+	        <TEXTURE id="wall" />       <!-- declared texture superimposes the texture received from parent node -->
+	                                  <!-- id="null" maintains texture from parent node       -->
+	                                  <!-- id="clear" clears texture declaration received from parent node      -->
+
+
+	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
+
+	        <ROTATION axis="y" scale="90"/>
+	        <TRANSLATION x="0" y="0" z="1"/>
+	        <SCALE sx="1" sy="6" sz="6" />
+	        <!-- declaring descendents, ate least one node or one leaf must be present -->
+	        <DESCENDANTS>
+	            <DESCENDANT id="rect" />       <!-- "ss" is the identifier of a node or of leaf; -->
+	                                         <!-- may be repeatad as necessary. It can refer an -->
+	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
+	        </DESCENDANTS>
+
+	    </NODE>
+
+	    <NODE id="front wall">       <!--   defines one intermediate node; may be repeated as necessary -->
+
+	        <!-- next two lines are mandatory -->
+	        <MATERIAL id="default" />      <!-- declared material superimposes the material received from parent node -->
+	                                  <!-- id="null" maintains material from parent node        -->
+	        <TEXTURE id="wall" />       <!-- declared texture superimposes the texture received from parent node -->
+	                                  <!-- id="null" maintains texture from parent node       -->
+	                                  <!-- id="clear" clears texture declaration received from parent node      -->
+
+
+	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
+
+	        <SCALE sx="6" sy="6" sz="1" />
+	        <!-- declaring descendents, ate least one node or one leaf must be present -->
+	        <DESCENDANTS>
+	            <DESCENDANT id="rect" />       <!-- "ss" is the identifier of a node or of leaf; -->
+	                                         <!-- may be repeatad as necessary. It can refer an -->
+	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
+	        </DESCENDANTS>
+
+	    </NODE>
 
 
 	</NODES>
