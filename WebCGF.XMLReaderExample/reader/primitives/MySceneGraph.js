@@ -173,6 +173,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement){
 		var s = this.reader.getString(amplifFactor[0], 's', true);
 		var t = this.reader.getString(amplifFactor[0], 't', true);
 		textures[id] = new MyTexture(this, id, path, s, t);
+		textures[id].enable();
 	}
 
 }
@@ -182,7 +183,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 	if (materialsElement == null) return "MATERIALS element is missing.";
 	var materialNode = materialsElement[0].getElementsByTagName('MATERIAL');
 	var numberMaterials = materialNode.length;
-	if (numberTextures < 1) return "number of 'MATERIAL' elements in 'MATERIALS' must be at least 1.";
+	if (numberMaterials < 1) return "number of 'MATERIAL' elements in 'MATERIALS' must be at least 1.";
 
 	this.materials = [];
 
@@ -237,6 +238,92 @@ MySceneGraph.prototype.parseLights= function(rootElement){
 		this.lights[id].setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
 		this.lights[id].setSpecular(specular[0], specular[1], specular[2], specular[3]);		
 	}
+
+
+}
+
+MySceneGraph.prototype.parseLeaves= function(rootElement){
+	var leavesElement = rootElement.getElementsByTagName('LEAVES');
+	if (leavesElement == null) return "LEAVES element is missing.";
+	var leafNode = leavesElement[0].getElementsByTagName('LEAF');
+	var numberLeaves = leafNode.length;
+	if (numberLeaves < 1) return "number of 'LEAF' elements in 'LEAVES' must be at least 1.";
+
+	this.leaves = [];
+
+	for(var i = 0; i < numberLeaves; i++){
+		var id = leafNode[i].id;
+		var type = this.reader.getString(leafNode[i], 'type', true);
+		switch(type){
+			case 'rectangle':
+				this.leaves[id] = parseRectangle(leafNode[i]);
+				break;
+			case 'cylinder':
+				this.leaves[id] = parseCylinder(leafNode[i]);
+				break;
+			case 'sphere':
+				this.leaves[id] = parseSphere(leafNode[i]);
+				break;
+			case 'triangle':
+				this.leaves[id] = parseTriangle(leafNode[i]);
+				break;
+			default:
+				return "invalid 'type' element in 'LEAF' id= " + id;
+		}
+	}
+}
+
+
+MySceneGraph.prototype.parseRectangle= function(node){
+	var args = this.reader.getString(node[0], 'args', true);
+	var coords = args.split(" ");
+	if (coords.length != 4)
+		return "number of arguments different of 4 in element args in 'LEAF' id= " + node.id;
+	return new MyRectangle(this, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseFloat(coords[3]));
+}
+
+MySceneGraph.prototype.parseTriangle= function(node){
+	var args = this.reader.getString(node[0], 'args', true);
+	var coords = args.split(" ");
+	if (coords.length != 9)
+		return "number of arguments different of 9 in element args in 'LEAF' id= " + node.id;
+	return new MyTriangle(this, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseFloat(coords[3]), parseFloat(coords[4]), parseFloat(coords[5]), parseFloat(coords[6]), parseFloat(coords[7]), parseFloat(coords[8]));
+}
+
+MySceneGraph.prototype.parseCylinder= function(node){
+	var args = this.reader.getString(node[0], 'args', true);
+	var coords = args.split(" ");
+	if (coords.length != 5)
+		return "number of arguments different of 5 in element args in 'LEAF' id= " + node.id;
+	return new MyCylinder(this, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseInt(coords[3]), parseInt(coords[4]));
+}
+
+MySceneGraph.prototype.parseSphere= function(node){
+	var args = this.reader.getString(node[0], 'args', true);
+	var coords = args.split(" ");
+	if (coords.length != 3)
+		return "number of arguments different of 3 in element args in 'LEAF' id= " + node.id;
+	return new MyCylinder(this, parseFloat(coords[0]), parseInt(coords[1]), parseInt(coords[2]));
+}
+
+MySceneGraph.prototype.parseTranslation= function(node){
+	var x = this.reader.getFloat(node[0], 'x', true);
+	var y = this.reader.getFloat(node[0], 'y', true);
+	var z = this.reader.getFloat(node[0], 'z', true);
+	//TODO criar translação e retornar
+}
+
+MySceneGraph.prototype.parseRotation= function(node){
+	var axis = this.reader.getString(node[0], 'axis', true);
+	var angle = this.reader.getFloat(node[0], 'angle', true);
+	//TODO criar rotação e retornar
+}
+
+MySceneGraph.prototype.parseScale= function(node){
+	var sx = this.reader.getFloat(node[0], 'sx', true);
+	var sy = this.reader.getFloat(node[0], 'sy', true);
+	var sz = this.reader.getFloat(node[0], 'sz', true);
+	//TODO criar scale e retornar;
 }
 
 MySceneGraph.prototype.parseLightPosition= function(node, element,nodeName){

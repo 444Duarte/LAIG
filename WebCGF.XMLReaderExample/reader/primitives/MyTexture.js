@@ -3,7 +3,7 @@
  * @constructor
  */
 function MyTexture(scene, id, path, s, t) {
-    CGFappearance.call(this);
+    CGFappearance.call(this, scene);
 
     this.id = id;
     this.loadTexture(scene);
