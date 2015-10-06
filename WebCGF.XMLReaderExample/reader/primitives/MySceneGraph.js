@@ -273,6 +273,12 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 	}
 }
 
+MySceneGraph.prototype.parseNodes= function(rootElement){
+	var lightElement = rootElement.getElementsByTagName('ROOT');
+	if (lightElement == null) return "LIGHTS element is missing.";
+	var rootId = 
+}
+
 
 MySceneGraph.prototype.parseRectangle= function(node){
 	var args = this.reader.getString(node[0], 'args', true);
@@ -305,6 +311,8 @@ MySceneGraph.prototype.parseSphere= function(node){
 		return "number of arguments different of 3 in element args in 'LEAF' id= " + node.id;
 	return new MyCylinder(this, parseFloat(coords[0]), parseInt(coords[1]), parseInt(coords[2]));
 }
+
+
 
 MySceneGraph.prototype.parseTranslation= function(node){
 	var x = this.reader.getFloat(node[0], 'x', true);
