@@ -273,12 +273,60 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 	}
 }
 
-MySceneGraph.prototype.parseNodes= function(rootElement){
-	var lightElement = rootElement.getElementsByTagName('ROOT');
-	if (lightElement == null) return "LIGHTS element is missing.";
-	var rootId = 
+MySceneGraph.prototype.parseNodeList= function(rootElement){
+	var nodesElement = rootElement.getElementsByTagName('NODES');
+	if (nodesElement == null) return "'NODES' element  is missing.";
+
+	var rootNode = nodesElement[0].getElementsByTagName('ROOT');
+	if (rootNode == null) return "'ROOT' element in 'NODES' missing";	
+	var rootId = this.reader.getString(rootNode[0], 'id', true);
+
+	var nodeList = nodesElement[0].getElementsByTagName('NODE');
+	if (nodeList.length < 1) return "There needs to be at least 1 'NODE' element inside 'NODES'";	
+
+	for(var i = 0; i < nodesList.length; i++ ){
+		parseNode(nodeList[i]);
+	} 
 }
 
+MySceneGraph.prototype.parseNode= function(node){
+	var material = parseNodeMaterial(node);
+	var texture = parseTexture(node);
+}
+
+MySceneGraph.prototype.parseNodeMaterial= function(node){
+	var materialElement = node.getElementsByTagName('MATERIAL');
+	if (materialElement == null) return "'MATERIAL' element missing in 'NODE' id= " + node.id;
+
+	switch(materialElement[0].id){
+		case "null":
+			return null;
+			break;
+		default:
+			var material = this.materials[materialElement.id];
+			if (material == null) return "'MATERIAL' id =" + materialElement.id + "referenced in 'NODE' id= " + node.id + " doesn't exist in 'MATERIALS'";
+			return material;	
+			break;
+	}
+}
+MySceneGraph.prototype.parseNodeTexture= function(node){
+	var textureElement = node.getElementsByTagName('TEXTURE');
+	if (textureElement == null) return "'TEXTURE' element missing in 'NODE' id= " + node.id;
+
+	switch(textureElement[0].id){
+		case "clear":
+			return "clear";
+			break;
+		case "null":
+			return "null";
+			break;
+		default:
+			var texture = this.textures[textureElement.id];
+			if (texture == null) return "'TEXTURE' id =" + textureElement.id + "referenced in 'NODE' id= " + node.id + " doesn't exist in 'TEXTURES'";
+			return texture;	
+			break;
+	}
+}
 
 MySceneGraph.prototype.parseRectangle= function(node){
 	var args = this.reader.getString(node[0], 'args', true);
