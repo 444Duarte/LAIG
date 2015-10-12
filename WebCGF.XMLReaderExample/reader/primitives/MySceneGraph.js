@@ -292,6 +292,13 @@ MySceneGraph.prototype.parseNodeList= function(rootElement){
 MySceneGraph.prototype.parseNode= function(node){
 	var material = parseNodeMaterial(node);
 	var texture = parseTexture(node);
+	var i = 2;
+	var transformations=[];
+	while(node.children[i].tagName != 'DESCENDANTS' && i < node.children.length){
+		transformations[i-2] = parseTransformation(node.children[i]);
+		i++;
+	}
+	//TODO acabar
 }
 
 MySceneGraph.prototype.parseNodeMaterial= function(node){
@@ -303,7 +310,7 @@ MySceneGraph.prototype.parseNodeMaterial= function(node){
 			return null;
 			break;
 		default:
-			var material = this.materials[materialElement.id];
+			var material = this.materials[materialElement[0].id];
 			if (material == null) return "'MATERIAL' id =" + materialElement.id + "referenced in 'NODE' id= " + node.id + " doesn't exist in 'MATERIALS'";
 			return material;	
 			break;
@@ -321,7 +328,7 @@ MySceneGraph.prototype.parseNodeTexture= function(node){
 			return "null";
 			break;
 		default:
-			var texture = this.textures[textureElement.id];
+			var texture = this.textures[textureElement[0].id];
 			if (texture == null) return "'TEXTURE' id =" + textureElement.id + "referenced in 'NODE' id= " + node.id + " doesn't exist in 'TEXTURES'";
 			return texture;	
 			break;
@@ -361,6 +368,21 @@ MySceneGraph.prototype.parseSphere= function(node){
 }
 
 
+
+MySceneGraph.prototype.parseTransformation= function(transformation){
+	//TODO Acabar
+	switch(transformation.tagName){
+		case 'TRANSLATION':
+			return parseTranslation(transformation);
+		case 'ROTATION':
+			return parseRotation(transformation);
+		case 'SCALE':
+			return parseScale(transformation);
+		default:
+			//TODO decidir o que fazer aqui.
+			break;
+	}
+}
 
 MySceneGraph.prototype.parseTranslation= function(node){
 	var x = this.reader.getFloat(node[0], 'x', true);
