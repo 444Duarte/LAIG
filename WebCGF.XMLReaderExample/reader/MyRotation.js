@@ -1,5 +1,7 @@
-function MyRotation(scene) {
+function MyRotation(scene, axis, degree) {
  	CGFobject.call(this,scene);
+ 	this.axis = axis;
+ 	this.degree = degree;
 	
  };
 

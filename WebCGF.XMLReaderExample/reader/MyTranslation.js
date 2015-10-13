@@ -1,5 +1,9 @@
-function MyTranslation(scene) {
+function MyTranslation(scene, x, y, z) {
  	CGFobject.call(this,scene);
+
+ 	this.x = x;
+ 	this.y = y;
+ 	this.z = z;
 	
  };
 
