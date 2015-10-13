@@ -2,6 +2,8 @@
  * MySphere
  * @constructor
  */
+
+ /** FALTA O RAIO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! **/
  function MySphere(scene, slices, stacks) {
  	CGFobject.call(this,scene);
 	

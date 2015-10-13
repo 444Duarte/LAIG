@@ -1,54 +1,42 @@
-/**
- * MyCilinder
- * @constructor
- */
- function MyCilinder(scene, height, bRad, tRad, stacks, slices) {
+function MyCylinderBody(scene, bRad, tRad, stacks, slices) {
  	CGFobject.call(this,scene);
 	
 	this.slices=slices;
 	this.stacks=stacks;
 
-	this.height = height;
 	this.bRad = bRad;
 	this.tRad = tRad;
 
-	this.bBase = new MyCircle(scene, slices);
-	this.tBase = new MyCircle(scene, slices);
-	this.body = new MyCylinderBody(scene, bRad, tRad, stacks, slices);
-
-	this.minS = typeof minS !== 'undefined' ? minS : 0;
-	this.maxS = typeof maxS !== 'undefined' ? maxS : 1;
-	this.minT = typeof minT !== 'undefined' ? minT : 0;
-	this.maxT = typeof maxT !== 'undefined' ? maxT : 1;
-
  	this.initBuffers();
- };
+};
 
- MyCilinder.prototype = Object.create(CGFobject.prototype);
- MyCilinder.prototype.constructor = MyCilinder;
+MyCylinderBody.prototype = Object.create(CGFobject.prototype);
+MyCylinderBody.prototype.constructor = MyCylinderBody;
 
- MyCilinder.prototype.initBuffers = function() {
- 
- 	/* Bottom base */
-	this.scene.pushMatrix();
-	this.scene.scale(this.bRad,this.bRad,1);
-	this.scene.rotate(Math.PI, 0, 1, 0);
-	this.bBase.display();
-	this.scene.popMatrix();
+MyCylinderBody.prototype.initBuffers = function() {
+    var angulo = 2*Math.PI/this.slices;
+	var radius = (this.tRad - this.bRad) / this.stacks;
 
-	/* Top base */
-	this.scene.pushMatrix();
-	this.scene.translate(0,0,this.height);
-	this.scene.scale(this.tRad, this.tRad,1);
-	this.tBase.display();
-	this.scene.popMatrix();
+	this.vertices=[];
+ 	this.normals=[];
 
-	/* Body */
-	this.scene.pushMatrix();
-	this.scene.scale(1,1,this.height);
-	this.body.display();
-	this.scene.popMatrix();
+ 	for(stack = 0; stack < this.stacks+1;++stack){
+ 		for(slice = 0; slice < this.slices;++slice){
+ 			// normais
+ 			this.vertices.push((this.bRad + (radius * stack))*Math.cos(slice*angulo),(this.bRad + (radius * stack))*Math.sin(slice*angulo),stack/this.stacks);
+ 			this.normals.push(Math.cos(slice*angulo),Math.sin(slice*angulo),0);
+ 		}
+ 	}
 
- 	this.primitiveType = this.scene.gl.TRIANGLES;
- 	this.initGLBuffers();
+ 	this.indices=[];
+
+	for(stack=0; stack < this.stacks;++stack){
+		for(slice=0; slice < this.slices;++slice){
+			this.indices.push(stack*this.slices+j,stack*this.slices+((slice+1)%this.slices),(stack+1)*this.slices+(slice+1)%this.slices);
+			this.indices.push(stack*this.slices+j,(stack+1)*this.slices+((slice+1)%this.slices),(stack+1)*this.slices+slice);
+		}
+	}
+	
+    this.primitiveType=this.scene.gl.TRIANGLES;
+	this.initGLBuffers();
  };
