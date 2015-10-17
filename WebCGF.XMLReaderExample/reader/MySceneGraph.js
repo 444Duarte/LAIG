@@ -277,14 +277,19 @@ MySceneGraph.prototype.parseNodeList= function(rootElement){
 
 	var rootNode = nodesElement[0].getElementsByTagName('ROOT');
 	if (rootNode == null) return onXMLError("'ROOT' element in 'NODES' missing.");	
-	var rootId = this.reader.getString(rootNode[0], 'id', true);
+	var rootID = this.reader.getString(rootNode[0], 'id', true);
 
 	var nodeList = nodesElement[0].getElementsByTagName('NODE');
 	if (nodeList.length < 1) return onXMLError("There needs to be at least 1 'NODE' element inside 'NODES'.");	
+	
+	this.nodes = [];
 
 	for(var i = 0; i < nodesList.length; i++ ){
-		parseNode(nodeList[i]);
+		this.nodes[nodeList[i].id] = parseNode(nodeList[i]);
 	}
+
+	if (this.nodes[rootID] == null) return onXMLError("'ROOT' id ="+rootNodeID+" doesn't exist as 'NODE' element.");
+
 }
 
 MySceneGraph.prototype.parseNode= function(node){
