@@ -2,7 +2,7 @@
 
 	<INITIALS>
 	    <frustum near="0.1" far="500"/>                      <!-- frustum planes-->
-	    <translate x="0" y="0" z="0" />                 <!-- initial translate -->
+	    <translation x="0" y="0" z="0" />                 <!-- initial translate -->
 	    <rotation axis="x" angle="0" />                  <!-- initial rotation 3 -->
 	    <rotation axis="y" angle="0" />                  <!-- initial rotation 2 -->
 	    <rotation axis="z" angle="0" />                  <!-- initial rotation 1 -->
@@ -20,7 +20,7 @@
 
 	<LIGHTS>
 	    <LIGHT id="initial_light">                                    <!-- light identifier -->
-	        <enable value ="1" />                         <!-- enable/disable -->
+	        <enable value="1" />                         <!-- enable/disable -->
 	        <position x="4" y="8" z="4" w="1" />       <!-- light position -->
 	        <ambient r="1" g="1" b="1" a="1" />        <!-- ambient component -->
 	        <diffuse r="1" g="1" b="1" a="1" />        <!-- diffuse component -->
@@ -34,24 +34,20 @@
 
 	<TEXTURES>
 	    <TEXTURE id="concrete">
-	        <file path="resources/concrete_texture.jpg" />                             <!-- path to file -->
-	        <amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
+	        <file path="textures/concrete_texture.jpg" />                             
+	        <amplif_factor s="1" t="1" />             
 	    </TEXTURE>
 
 	    <TEXTURE id="wood">
-	        <file path="resources/wood.jpg" />                             <!-- path to file -->
-	        <amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
+	        <file path="textures/wood.jpg" />                  
+	        <amplif_factor s="1" t="1" />            
 	    </TEXTURE>
 
-	    <TEXTURE id="desktop">
-	        <file path="resources/desktop.jpg" />                             <!-- path to file -->
-	        <amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
+	    <TEXTURE id="wallpaper">
+	        <file path="textures/desktop_wallpaper.jpg" />                            
+	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
-	    <TEXTURE id="wall">
-	        <file path="resources/wall.jpg" />                             <!-- path to file -->
-	        <amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
-	    </TEXTURE>
 	    <!-- NOTE: this block "TEXTURE" must be repeated as necessary with different "id" -->
 	    
 	</TEXTURES>
@@ -91,8 +87,8 @@
 
 	    <!-- next lines define nodes of type leaf; they may be repeated, in any order, as necessary -->
 	    <LEAF id="rect" type="rectangle" args="0 1 1 0" />
-	    <LEAF id="cyl" type="cylinder" args="1 1 1 10 10" /> 
-	    <LEAF id="sphere" type="sphere" args="1 10 10" />
+	    <LEAF id="cyl" type="cylinder" args="1.0 1.0 1.0 10 10" /> 
+	    <LEAF id="sphere" type="sphere" args="1 50 50" />
 	    <LEAF id="tri" type="triangle" args="0 0 0  1 0 0  0.5 0 1" />
 
 	    <!-- Parameters of the above primitives:                                                         -->
@@ -106,15 +102,15 @@
 
 	<NODES>
 
-	    <ROOT id="root" />     <!-- identifier of root node of the scene graph; this node     -->
+	    <ROOT id="gaming_room" />     <!-- identifier of root node of the scene graph; this node     -->
 	                         <!--   must be defined in one of the following NODE declarations -->
 
-	    <NODE id="root">       <!--   defines one intermediate node; may be repeated as necessary -->
+	    <NODE id="gaming_room">       <!--   defines one intermediate node; may be repeated as necessary -->
 
 	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="null" />      <!-- declared material superimposes the material received from parent node -->
+	        <MATERIAL id="default" />      <!-- declared material superimposes the material received from parent node -->
 	                                  <!-- id="null" maintains material from parent node        -->
-	        <TEXTURE id="clear" />       <!-- declared texture superimposes the texture received from parent node -->
+	        <TEXTURE id="null" />       <!-- declared texture superimposes the texture received from parent node -->
 	                                  <!-- id="null" maintains texture from parent node       -->
 	                                  <!-- id="clear" clears texture declaration received from parent node      -->
 
@@ -123,20 +119,19 @@
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
-	            <DESCENDANT id="mesa" />       <!-- "ss" is the identifier of a node or of leaf; -->
+	            <DESCENDANT id="mesa1" />       <!-- "ss" is the identifier of a node or of leaf; -->
 	                                         <!-- may be repeatad as necessary. It can refer an -->
 	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
-	            <DESCENDANT id="cadeira" />       <!-- "ss" is the identifier of a node or of leaf; -->
-	                                         <!-- may be repeatad as necessary. It can refer an -->
-	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
-	            <DESCENDANT id="rato" />       <!-- "ss" is the identifier of a node or of leaf; -->
-	                                         <!-- may be repeatad as necessary. It can refer an -->
-	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
+	            <DESCENDANT id="cadeira1" />
+	            
+	            <DESCENDANT id="rato" />
+
+	        	
 	            <DESCENDANT id="torre" />
+	            
 	            <DESCENDANT id="teclado" />
+	            
 	            <DESCENDANT id="monitor" />
-	            <DESCENDANT id="left wall"/>
-	            <DESCENDANT id="front wall"/>
 
 	        </DESCENDANTS>
 
@@ -155,7 +150,7 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <ROTATION axis="y" angle="270">
+	        <ROTATION axis="y" angle="270"/>
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
@@ -201,7 +196,7 @@
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 	        <TRANSLATION x="1" y="0" z="1"/>
 	        <ROTATION axis="y" angle="180"/>
-	        <TRANSLATION x="0" y="0" z="1"/>
+	        <TRANSLATION x="0" y="0" z="1" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="rect" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -223,7 +218,7 @@
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 	        <TRANSLATION x="1" y="0" z="1" />
-	        <ROTATION axis="x" angle="90" />
+	        <ROTATION axis="y" angle="90" />
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
@@ -256,7 +251,7 @@
 
 	    </NODE>
 
-	     <NODE id="rect6">       <!--   defines one intermediate node; may be repeated as necessary -->
+	    <NODE id="rect6">       <!--   defines one intermediate node; may be repeated as necessary -->
 
 	        <!-- next two lines are mandatory -->
 	        <MATERIAL id="null" />      <!-- declared material superimposes the material received from parent node -->
@@ -289,7 +284,6 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="rect1" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -318,7 +312,7 @@
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 	        <TRANSLATION x="-2" y="0" z="-2" />
-	        <SCALE sx="1" sy="6" sz="1" />
+	        <SCALE sx="0.5" sy="3" sz="0.5" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -340,7 +334,7 @@
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 	        <TRANSLATION x="2" y="0" z="-2" />
-	        <SCALE sx="1" sy="6" sz="1" />
+	        <SCALE sx="0.5" sy="3" sz="0.5" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -362,7 +356,7 @@
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 	        <TRANSLATION x="-2" y="0" z="2" />
-	        <SCALE sx="1" sy="6" sz="1" />
+	        <SCALE sx="0.5" sy="3" sz="0.5" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -384,7 +378,7 @@
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 	        <TRANSLATION x="2" y="0" z="2" />
-	        <SCALE sx="1" sy="6" sz="1" />
+	        <SCALE sx="0.5" sy="3" sz="0.5" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -405,8 +399,8 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="0" y="3" z="0" />
-	        <SCALE sx="6" sy="0.5" sz="2" />
+	        <TRANSLATION x="-2" y="3" z="-2" />
+	        <SCALE sx="4.5" sy="0.5" sz="4.5" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -416,7 +410,7 @@
 
 	    </NODE>
 
-	     <NODE id="mesa">       <!--   defines one intermediate node; may be repeated as necessary -->
+	    <NODE id="mesa">       <!--   defines one intermediate node; may be repeated as necessary -->
 
 	        <!-- next two lines are mandatory -->
 	        <MATERIAL id="brown" />      <!-- declared material superimposes the material received from parent node -->
@@ -440,20 +434,19 @@
 
 	    </NODE>
 
-	    </NODE>
-
-	     <NODE id="mesa1">       <!--   defines one intermediate node; may be repeated as necessary -->
+	    <NODE id="mesa1">       <!--   defines one intermediate node; may be repeated as necessary -->
 
 	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="brown" />      <!-- declared material superimposes the material received from parent node -->
+	        <MATERIAL id="null" />      <!-- declared material superimposes the material received from parent node -->
 	                                  <!-- id="null" maintains material from parent node        -->
-	        <TEXTURE id="wood" />       <!-- declared texture superimposes the texture received from parent node -->
+	        <TEXTURE id="null" />       <!-- declared texture superimposes the texture received from parent node -->
 	                                  <!-- id="null" maintains texture from parent node       -->
 	                                  <!-- id="clear" clears texture declaration received from parent node      -->
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 
-	        <TRANSLATION x="4" y="3" z="4" />
+	        <TRANSLATION x="8" y="0" z="8" />
+
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
@@ -470,7 +463,7 @@
 	    <NODE id="rato">       <!--   defines one intermediate node; may be repeated as necessary -->
 
 	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="ss" />      <!-- declared material superimposes the material received from parent node -->
+	        <MATERIAL id="null" />      <!-- declared material superimposes the material received from parent node -->
 	                                  <!-- id="null" maintains material from parent node        -->
 	        <TEXTURE id="concrete" />       <!-- declared texture superimposes the texture received from parent node -->
 	                                  <!-- id="null" maintains texture from parent node       -->
@@ -479,7 +472,8 @@
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 	        <TRANSLATION x="1" y="0" z="0.5" />
-	        <SCALE sx="1" sy="0.5" sz="3" />
+	        <TRANSLATION x="9" y="3.5" z="9" />
+	        <SCALE sx="0.25" sy="0.25" sz="0.4" />
 
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
@@ -493,10 +487,12 @@
 
 	    <!--              CRIAR UMA TORRE             -->
 
+
+
 	    <NODE id="torre">       <!--   defines one intermediate node; may be repeated as necessary -->
 
 	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="ss" />      <!-- declared material superimposes the material received from parent node -->
+	        <MATERIAL id="null" />      <!-- declared material superimposes the material received from parent node -->
 	                                  <!-- id="null" maintains material from parent node        -->
 	        <TEXTURE id="concrete" />       <!-- declared texture superimposes the texture received from parent node -->
 	                                  <!-- id="null" maintains texture from parent node       -->
@@ -504,14 +500,14 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="ff" y="ff" z="ff" />
-	        <ROTATION axis="cc" angle="ff" />
-	        <SCALE sx="ff" sy="ff" sz="ff" />
+	        
+	        <TRANSLATION x="12" y="0" z="8" />
+	        <SCALE sx="1" sy="2" sz="3" />
 
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
-	            <DESCENDANT id="cyl" />       <!-- "ss" is the identifier of a node or of leaf; -->
+	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
 	                                         <!-- may be repeatad as necessary. It can refer an -->
 	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
 	        </DESCENDANTS>
@@ -532,7 +528,7 @@
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 	        <TRANSLATION x="-0.75" y="0" z="-0.5" />
-	        <SCALE sx="1" sy="3" sz="1" />
+	        <SCALE sx="0.5" sy="1.5" sz="0.5" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -553,8 +549,8 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="0.75" y="0" z="-0.5" />
-	        <SCALE sx="1" sy="3" sz="1" />
+	        <TRANSLATION x="1.25" y="0" z="-0.5" />
+	        <SCALE sx="0.5" sy="1.5" sz="0.5" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -575,8 +571,8 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="-0.75" y="0" z="0.5" />
-	        <SCALE sx="1" sy="3" sz="1" />
+	        <TRANSLATION x="-0.75" y="0" z="1" />
+	        <SCALE sx="0.5" sy="1.5" sz="0.5" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -597,8 +593,8 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="0.75" y="0" z="0.5" />
-	        <SCALE sx="1" sy="3" sz="1" />
+	        <TRANSLATION x="1.25" y="0" z="1" />
+	        <SCALE sx="0.5" sy="1.5" sz="0.5" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -619,8 +615,8 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="0" y="1.5" z="0" />
-	        <SCALE sx="1.5" sy="0.2" sz="1" />
+	        <TRANSLATION x="-0.75" y="1.5" z="-0.5" />
+	        <SCALE sx="2.5" sy="0.2" sz="2" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -641,8 +637,8 @@
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="0" y="1" z="0.5" />
-	        <SCALE sx="1.5" sy="2" sz="0.5" />
+	        <TRANSLATION x="-0.75" y="1.5" z="1" />
+	        <SCALE sx="2.5" sy="2" sz="0.5" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -655,18 +651,17 @@
 	    <NODE id="cadeira">       <!--   defines one intermediate node; may be repeated as necessary -->
 
 	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="brown" />      <!-- declared material superimposes the material received from parent node -->
+	        <MATERIAL id="null" />      <!-- declared material superimposes the material received from parent node -->
 	                                  <!-- id="null" maintains material from parent node        -->
-	        <TEXTURE id="wood" />       <!-- declared texture superimposes the texture received from parent node -->
+	        <TEXTURE id="null" />       <!-- declared texture superimposes the texture received from parent node -->
 	                                  <!-- id="null" maintains texture from parent node       -->
 	                                  <!-- id="clear" clears texture declaration received from parent node      -->
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-	        <TRANSLATION x="4" y="1.5" z="4" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
-	            <DESCENDANT id="tampo_cadeira " />       <!-- "ss" is the identifier of a node or of leaf; -->
+	            <DESCENDANT id="tampo_cadeira" />       <!-- "ss" is the identifier of a node or of leaf; -->
 	                                         <!-- may be repeatad as necessary. It can refer an -->
 	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
 	            <DESCENDANT id="perna_cadeira1" />
@@ -678,22 +673,44 @@
 
 	    </NODE>
 
+	    <NODE id="cadeira1">       <!--   defines one intermediate node; may be repeated as necessary -->
+
+	        <!-- next two lines are mandatory -->
+	        <MATERIAL id="brown" />      <!-- declared material superimposes the material received from parent node -->
+	                                  <!-- id="null" maintains material from parent node        -->
+	        <TEXTURE id="wood" />       <!-- declared texture superimposes the texture received from parent node -->
+	                                  <!-- id="null" maintains texture from parent node       -->
+	                                  <!-- id="clear" clears texture declaration received from parent node      -->
+
+
+	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
+	        <SCALE sx="1" sy="1.5" sz="1" />
+	        <TRANSLATION x="8" y="0" z="12" />
+	        <!-- declaring descendents, ate least one node or one leaf must be present -->
+	        <DESCENDANTS>
+	            <DESCENDANT id="cadeira" />
+	        </DESCENDANTS>
+
+	    </NODE>
+
+
 	    <!--              CRIAR UM TECLADO             -->
 
 	    <NODE id="teclado">       <!--   defines one intermediate node; may be repeated as necessary -->
 
 	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="null" />      <!-- declared material superimposes the material received from parent node -->
+	        <MATERIAL id="default" />      <!-- declared material superimposes the material received from parent node -->
 	                                  <!-- id="null" maintains material from parent node        -->
-	        <TEXTURE id="null" />       <!-- declared texture superimposes the texture received from parent node -->
+	        <TEXTURE id="concrete" />       <!-- declared texture superimposes the texture received from parent node -->
 	                                  <!-- id="null" maintains texture from parent node       -->
 	                                  <!-- id="clear" clears texture declaration received from parent node      -->
 
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 	        <TRANSLATION x="2" y="0" z="1" />
-	        <SCALE sx="2" sy="0.5" sz="0.5" />
-	        <ROTATION axis="x" scale="45"/>
+	        <TRANSLATION x="5.5" y="3.5" z="8" />
+	        <SCALE sx="2" sy="0.1" sz="0.5" />
+
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
@@ -704,6 +721,28 @@
 	    </NODE>
 
 	    <!--              CRIAR UM MONITOR             -->
+
+	    <NODE id="desktop wallpaper">       <!--   defines one intermediate node; may be repeated as necessary -->
+
+	        <!-- next two lines are mandatory -->
+	        <MATERIAL id="null" />      <!-- declared material superimposes the material received from parent node -->
+	                                  <!-- id="null" maintains material from parent node        -->
+	        <TEXTURE id="wallpaper" />       <!-- declared texture superimposes the texture received from parent node -->
+	                                  <!-- id="null" maintains texture from parent node       -->
+	                                  <!-- id="clear" clears texture declaration received from parent node      -->
+
+
+	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
+
+	        <TRANSLATION x="0" y="0" z="1" />
+	        <!-- declaring descendents, ate least one node or one leaf must be present -->
+	        <DESCENDANTS>
+	            <DESCENDANT id="rect" />       <!-- "ss" is the identifier of a node or of leaf; -->
+	                                         <!-- may be repeatad as necessary. It can refer an -->
+	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
+	        </DESCENDANTS>
+
+	    </NODE>
 
 	    <NODE id="monitor">       <!--   defines one intermediate node; may be repeated as necessary -->
 
@@ -717,85 +756,17 @@
 
 	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
 	        <TRANSLATION x="2" y="0" z="0.5" />
+	        <TRANSLATION x="5.5" y="4" z="7" />
 	        <SCALE sx="2" sy="2" sz="0.1" />
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
 	        <DESCENDANTS>
 	            <DESCENDANT id="cube" />       <!-- "ss" is the identifier of a node or of leaf; -->
 	                                         <!-- may be repeatad as necessary. It can refer an -->
 	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
+	            <DESCENDANT id="desktop wallpaper" />
 	        </DESCENDANTS>
 
 	    </NODE>
-
-	    <NODE id="desktop wallpaper">       <!--   defines one intermediate node; may be repeated as necessary -->
-
-	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="default" />      <!-- declared material superimposes the material received from parent node -->
-	                                  <!-- id="null" maintains material from parent node        -->
-	        <TEXTURE id="wallpaper" />       <!-- declared texture superimposes the texture received from parent node -->
-	                                  <!-- id="null" maintains texture from parent node       -->
-	                                  <!-- id="clear" clears texture declaration received from parent node      -->
-
-
-	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-
-	         <TRANSLATION x="2" y="0" z="1.5" />
-	        <SCALE sx="2" sy="2" sz="0.1" />
-	        <!-- declaring descendents, ate least one node or one leaf must be present -->
-	        <DESCENDANTS>
-	            <DESCENDANT id="rect" />       <!-- "ss" is the identifier of a node or of leaf; -->
-	                                         <!-- may be repeatad as necessary. It can refer an -->
-	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
-	        </DESCENDANTS>
-
-	    </NODE>
-
-	    <NODE id="left wall">       <!--   defines one intermediate node; may be repeated as necessary -->
-
-	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="default" />      <!-- declared material superimposes the material received from parent node -->
-	                                  <!-- id="null" maintains material from parent node        -->
-	        <TEXTURE id="wall" />       <!-- declared texture superimposes the texture received from parent node -->
-	                                  <!-- id="null" maintains texture from parent node       -->
-	                                  <!-- id="clear" clears texture declaration received from parent node      -->
-
-
-	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-
-	        <ROTATION axis="y" scale="90"/>
-	        <TRANSLATION x="0" y="0" z="1"/>
-	        <SCALE sx="1" sy="6" sz="6" />
-	        <!-- declaring descendents, ate least one node or one leaf must be present -->
-	        <DESCENDANTS>
-	            <DESCENDANT id="rect" />       <!-- "ss" is the identifier of a node or of leaf; -->
-	                                         <!-- may be repeatad as necessary. It can refer an -->
-	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
-	        </DESCENDANTS>
-
-	    </NODE>
-
-	    <NODE id="front wall">       <!--   defines one intermediate node; may be repeated as necessary -->
-
-	        <!-- next two lines are mandatory -->
-	        <MATERIAL id="default" />      <!-- declared material superimposes the material received from parent node -->
-	                                  <!-- id="null" maintains material from parent node        -->
-	        <TEXTURE id="wall" />       <!-- declared texture superimposes the texture received from parent node -->
-	                                  <!-- id="null" maintains texture from parent node       -->
-	                                  <!-- id="clear" clears texture declaration received from parent node      -->
-
-
-	        <!-- geom. transf. are optional and may be repeated, in any order, as necessary -->
-
-	        <SCALE sx="6" sy="6" sz="1" />
-	        <!-- declaring descendents, ate least one node or one leaf must be present -->
-	        <DESCENDANTS>
-	            <DESCENDANT id="rect" />       <!-- "ss" is the identifier of a node or of leaf; -->
-	                                         <!-- may be repeatad as necessary. It can refer an -->
-	                                         <!-- identifier of another node or leaf, later defined in the lsx file. -->
-	        </DESCENDANTS>
-
-	    </NODE>
-
 
 	</NODES>
 
