@@ -68,7 +68,7 @@ MySceneGraph.prototype.parseInitials= function(rootElement){
 	this.frustum[0] = this.reader.getFloat(frustum[0], 'near', true);
 	this.frustum[1] = this.reader.getFloat(frustum[0], 'far', true);
 
-	var translate = initials.getElementsByTagName('translate');
+	var translate = initials.getElementsByTagName('translation');
 	if(translate == null) return "translate element missing in INITIALS";
 	this.translate = this.parseTranslation(translate[0]);
 
@@ -101,7 +101,6 @@ MySceneGraph.prototype.parseIllumination= function(rootElement){
 	
 
 	this.ambientLight = this.parseRGBA(illumination[0], 'ambient','ILLUMINATION');
-	this.doubleside = this.reader.getBoolean(illumination[0], 'doubleside', true);
 	this.backgroundLight = this.parseRGBA(illumination[0], 'background','ILLUMINATION');
 
 };
@@ -121,7 +120,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement){
 	for(var i = 0; i < numberTextures; i++){
 		var id = this.reader.getString(textureNode[i], 'id',true);
 
-		var file = textureNode[i].getElementsByTagName('path');
+		var file = textureNode[i].getElementsByTagName('file');
 		if (file == null) return "'file' element missing in TEXTURE id = " + id;
 		var path = this.reader.getString(file[0], 'path', true);
 
@@ -129,7 +128,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement){
 		if (amplifFactor == null) return "'amplif_factor' element missing in TEXTURE id = " + id + ".";
 		var s = this.reader.getString(amplifFactor[0], 's', true);
 		var t = this.reader.getString(amplifFactor[0], 't', true);
-		textures[id] = new MyTexture(this, id, path, s, t);
+		this.textures[id] = new MyTexture(this.scene, id, path, s, t);
 	}
 
 };
@@ -157,7 +156,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 		var ambient = this.parseRGBA(materialNode[i], 'ambient', 'MATERIAL');
 		var emission = this.parseRGBA(materialNode[i], 'emission', 'MATERIAL');
 	
-		var newMaterial = new MyMaterial(this, id);
+		var newMaterial = new MyMaterial(this.scene, id);
 		newMaterial.setShininess(shininess);
 		newMaterial.setSpecular(specular[0], specular[1], specular[2], specular[3]);
 		newMaterial.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
@@ -180,13 +179,17 @@ MySceneGraph.prototype.parseLights= function(rootElement){
 	this.lights = [];
 	for(var i = 0; i <numberLights; i++){
 		var id = lightNode[i].id;
-		var enable = this.reader.getBoolean(lightNode[i], 'enable', true);
+		
+		var enableElem = lightNode[i].getElementsByTagName("enable");
+		if (enableElem == null) return "'enable' element inside LIGHT id = "+id+ " missing.";
+		var enable = this.reader.getBoolean(enableElem[0], 'value', true);
+
 		var position = this.parseLightPosition(lightNode[i], 'position', 'LIGHT');
 		var ambient = this.parseRGBA(lightNode[i], 'ambient', 'LIGHT');
 		var diffuse = this.parseRGBA(lightNode[i], 'diffuse', 'LIGHT');
 		var specular = this.parseRGBA(lightNode[i], 'specular', 'LIGHT');
 
-		this.lights[id] = new CGFlight( this, lightNode[i].id );
+		this.lights[id] = new CGFlight(this.scene, lightNode[i].id );
 		if(enable)
 			this.lights[id].enable();
 		else
@@ -236,7 +239,7 @@ MySceneGraph.prototype.parseNodeList= function(rootElement){
 	var nodesElement = rootElement.getElementsByTagName('NODES');
 	if (nodesElement == null) return "'NODES' element  is missing.";
 	if (nodesElement.length != 1) return "either zero or more than one 'NODES' element found.";
-	
+
 	var rootNode = nodesElement[0].getElementsByTagName('ROOT');
 	if (rootNode == null) return ("'ROOT' element in 'NODES' missing.");	
 	var rootID = this.reader.getString(rootNode[0], 'id', true);
@@ -312,7 +315,7 @@ MySceneGraph.prototype.parseNodeTexture= function(node){
 };
 
 MySceneGraph.prototype.parseRectangle= function(node){
-	var args = this.reader.getString(node[0], 'args', true);
+	var args = this.reader.getString(node, 'args', true);
 	var coords = args.split(" ");
 	if (coords.length != 4)
 		return this.onXMLError("number of arguments different of 4 in element args in 'LEAF' id= " + node.id);
@@ -320,7 +323,7 @@ MySceneGraph.prototype.parseRectangle= function(node){
 };
 
 MySceneGraph.prototype.parseTriangle= function(node){
-	var args = this.reader.getString(node[0], 'args', true);
+	var args = this.reader.getString(node, 'args', true);
 	var coords = args.split(" ");
 	if (coords.length != 9)
 		return this.onXMLError("number of arguments different of 9 in element args in 'LEAF' id= " + node.id);
@@ -328,7 +331,7 @@ MySceneGraph.prototype.parseTriangle= function(node){
 };
 
 MySceneGraph.prototype.parseCylinder= function(node){
-	var args = this.reader.getString(node[0], 'args', true);
+	var args = this.reader.getString(node, 'args', true);
 	var coords = args.split(" ");
 	if (coords.length != 5)
 		return this.onXMLError("number of arguments different of 5 in element args in 'LEAF' id= " + node.id);
@@ -336,7 +339,7 @@ MySceneGraph.prototype.parseCylinder= function(node){
 };
 
 MySceneGraph.prototype.parseSphere= function(node){
-	var args = this.reader.getString(node[0], 'args', true);
+	var args = this.reader.getString(node, 'args', true);
 	var coords = args.split(" ");
 	if (coords.length != 3)
 		return this.onXMLError("number of arguments different of 3 in element args in 'LEAF' id= " + node.id);

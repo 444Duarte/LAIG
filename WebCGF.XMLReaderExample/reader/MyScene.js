@@ -49,19 +49,22 @@ MyScene.prototype.setDefaultAppearance = function () {
 MyScene.prototype.onGraphLoaded = function () 
 {
 
-    this.camera.near = this.graph.frustum['near'];
-    this.camera.far = this.graph.frustum['far'];
+    this.camera.near = this.graph.frustum[0];
+    this.camera.far = this.graph.frustum[1];
 
-    if (this.graph.reference > 0)
-        this.axis = new CGFaxis(this, this.graph.reference);
+    if (this.graph.initials.referenceLength > 0)
+	   this.axis = new CGFaxis(this, this.graph.reference);
+	   
+	this.gl.clearColor(this.graph.illumination.backgroundLight[0],this.graph.illumination.backgroundLight[1],this.graph.backgroundLight[2],this.graph.backgroundLight[3]);
+	this.setGlobalAmbientLight(this.graph.ambientLight[0],this.graph.ambientLight[1],this.graph.ambientLight[2],this.graph.ambientLight[3]);
 
-    this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
-    this.setGlobalAmbientLight(this.graph.ambientLight[0],this.graph.ambientLight[1],this.graph.ambientLight[2],this.graph.ambientLight[3]);
-    
-     for (var i = 0; i < this.graph.lights.length; ++i) {
-        this.lights[i] = this.graph.lights[i];
-        this.lights[i].setVisible(true);
+    for (var i = 0; i < this.graph.lights.length; ++i) {
+    	this.lights[i] = this.graph.lights[i];
+    	this.lights[i].setVisible(true);
+    	this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
     }
+	
+	this.textures = this.graph
 };
 
 MyScene.prototype.display = function () {
