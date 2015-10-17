@@ -4,16 +4,16 @@ function MyScene(scene){
 
 };
 
-MyScene.prototype = Object.create(MyScene.prototype);
+MyScene.prototype = Object.create(CGFscene.prototype);
 MyScene.prototype.constructor = MyScene;
 
-XMLscene.prototype.init = function (application) {
+MyScene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
     this.initCameras();
+	this.enableTextures(true);
 
     this.initLights();
-    this.initObjects();
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -22,21 +22,22 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
+
 	this.axis=new CGFaxis(this);
 };
 
-XMLscene.prototype.initLights = function () {
+MyScene.prototype.initLights = function () {
 
     this.shader.bind();
 
     this.shader.unbind();
 };
 
-XMLscene.prototype.initCameras = function () {
+MyScene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
-XMLscene.prototype.setDefaultAppearance = function () {
+MyScene.prototype.setDefaultAppearance = function () {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
@@ -45,7 +46,7 @@ XMLscene.prototype.setDefaultAppearance = function () {
 
 // Handler called when the graph is finally loaded. 
 // As loading is asynchronous, this may be called already after the application has started the run loop
-XMLscene.prototype.onGraphLoaded = function () 
+MyScene.prototype.onGraphLoaded = function () 
 {
 
     this.camera.near = this.graph.frustum['near'];
@@ -63,7 +64,7 @@ XMLscene.prototype.onGraphLoaded = function ()
     }
 };
 
-XMLscene.prototype.display = function () {
+MyScene.prototype.display = function () {
     // ---- BEGIN Background, camera and axis setup
     this.shader.bind();
     

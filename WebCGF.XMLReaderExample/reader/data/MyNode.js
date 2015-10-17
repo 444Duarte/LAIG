@@ -53,7 +53,7 @@ MyNode.prototype.display = function(parentTexture, parentMaterial) {
  	}
  	for(var i = 0; i < descendants.length; i++)
  	{
- 		if (this.scene.nodes[this.descendants[i] == null)
+ 		if (this.scene.nodes[this.descendants[i]] == null)
  		{
  			if (this.scene.leaves[this.descendants[i]] == null)
  			{

@@ -25,12 +25,17 @@ function MySceneGraph(filename, scene) {
  */
 MySceneGraph.prototype.onXMLReady=function() 
 {
-	console.log("XML Loading finished.");
+	console.log("LSX Loading finished.");
 	var rootElement = this.reader.xmlDoc.documentElement;
 	
 	// Here should go the calls for different functions to parse the various blocks
-	var error = this.parseGlobalsExample(rootElement);
-	error = this.parseInitials(rootElement);
+	var error = this.parseInitials(rootElement);
+	error = this.parseIllumination(rootElement);
+	error = this.parseLights(rootElement);
+	error = this.parseTextures(rootElement);
+	error = this.parseMaterials(rootElement);
+	error = this.parseLeaves(rootElement);
+	error = this.parseNodes(rootElement);
 
 	if (error != null) {
 		this.onXMLError(error);
@@ -41,51 +46,6 @@ MySceneGraph.prototype.onXMLReady=function()
 	
 	// As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
 	this.scene.onGraphLoaded();
-};
-
-
-
-/*
- * Example of method that parses elements of one block and stores information in a specific data structure
- */
-MySceneGraph.prototype.parseGlobalsExample= function(rootElement) {
-	
-	var elems =  rootElement.getElementsByTagName('globals');
-	if (elems == null) {
-		return "globals element is missing.";
-	}
-
-	if (elems.length != 1) {
-		return "either zero or more than one 'globals' element found.";
-	}
-
-	// various examples of different types of access
-	var globals = elems[0];
-	this.background = this.reader.getRGBA(globals, 'background');
-	this.drawmode = this.reader.getItem(globals, 'drawmode', ["fill","line","point"]);
-	this.cullface = this.reader.getItem(globals, 'cullface', ["back","front","none", "frontandback"]);
-	this.cullorder = this.reader.getItem(globals, 'cullorder', ["ccw","cw"]);
-
-	console.log("Globals read from file: {background=" + this.background + ", drawmode=" + this.drawmode + ", cullface=" + this.cullface + ", cullorder=" + this.cullorder + "}");
-
-	var tempList=rootElement.getElementsByTagName('list');
-
-	if (tempList == null) {
-		return "list element is missing.";
-	}
-	
-	this.list=[];
-	// iterate over every element
-	var nnodes=tempList[0].children.length;
-	for (var i=0; i< nnodes; i++)
-	{
-		var e=tempList[0].children[i];
-
-		// process each element and store its information
-		this.list[e.id]=e.attributes.getNamedItem("coords").value;
-		console.log("Read list item id "+ e.id+" with value "+this.list[e.id]);
-	};
-
 };
 
 
@@ -110,67 +70,27 @@ MySceneGraph.prototype.parseInitials= function(rootElement){
 
 	var translate = initials.getElementsByTagName('translate');
 	if(translate == null) return onXMLError("translate element missing in INITIALS");
-	this.translate = [];
-	this.translate[0] = this.reader.getFloat(translate[0], 'x', true);
-	this.translate[1] = this.reader.getFloat(translate[0], 'y', true);
-	this.translate[2] = this.reader.getFloat(translate[0], 'z', true);
+	this.translate = this.parseTranslation(translate[0]);
 
 	var rotation = initials.getElementsByTagName('rotation');
-	if (rotation.length != 3) return onXMLError("rotation elements in INITIALS not correct. Number of elements 'rotation' must be three.");
+	if (rotation.length != 3) return onXMLError("rotation element in INITIALS not correct. Number of elements 'rotation' must be three.");
 	this.rotation = [];
-<<<<<<< HEAD
-	var rotationX = [];
-	rotationX[0] = this.reader.getString(rotation[0], 'axis', true);
-	rotationX[1] = this.reader.getFloat(rotation[0], 'angle', true);
-	this.rotation[0] = rotationX;
-	var rotationY = [];
-	rotationY[0] = this.reader.getString(rotation[1], 'axis', true);
-	rotationY[1] = this.reader.getFloat(rotation[1], 'angle', true);
-	this.rotation[1] = rotationY;
-	var rotationZ = [];
-	rotationZ[0] = this.reader.getString(rotation[2], 'axis', true);
-	rotationZ[1] = this.reader.getFloat(rotation[2], 'angle', true);
-	this.rotation[2] = rotationZ;
+	var rotation1 = this.parseRotation(rotation[0]);
+	this.rotation[0] = rotation1;
+	var rotation2 = this.parseRotation(rotation[1]);
+	this.rotation[1] = rotation2;
+	var rotation3 = this.parseRotation(rotation[2]);
+	this.rotation[2] = rotation3;
 
 	var scale = initials.getElementsByTagName('scale');
-	this.scale = [];
-	this.scale[0] = this.reader.getFloat(scale, 'sx', true);
-	this.scale[1] = this.reader.getFloat(scale, 'sy', true);
-	this.scale[2] = this.reader.getFloat(scale, 'sz', true);
+	if (scale == null) return onXMLError("translate element missing in INITIALS");
+	this.scale = this.parseScale(scale[0]);
 	
-=======
-	var rotation1 = [];
-	rotation1[0] = this.reader.getString(rotation[0], 'axis', true);
-	rotation1[1] = this.reader.getFloat(rotation[0], 'angle', true);
-	this.rotation[0] = rotation1;
-	var rotation2 = [];
-	rotation2[0] = this.reader.getString(rotation[1], 'axis', true);
-	rotation2[1] = this.reader.getFloat(rotation[1], 'angle', true);
-	this.rotation[1] = rotation2;
-	var rotation3 = [];
-	rotation3[0] = this.reader.getString(rotation[2], 'axis', true);
-	rotation3[1] = this.reader.getFloat(rotation[2], 'angle', true);
-	this.rotation[2] = rotation3;	
-	
-	var reference = this.initials.getElementsByTagName('reference');
+	var reference = initials.getElementsByTagName('reference');
 	if (reference == null) return onXMLError("reference element missing in INITIALS");
 	this.reference = this.reader.getFloat(reference[0],'length', true);	
->>>>>>> master
 
 };
-
-MySceneGraph.prototype.parseIlumination= function(rootElement){
-	//TODO add console.logs
-	var ilumation = rootElement.getElementsByTagName('ILLUMINATION');
-	if (ilumation == null) return "ILLUMINATION element is missing.";
-
-	if (ilumation[0].children.length != 2) return "number of elements in 'ILLUMINATION' different from two.";
-	
-
-	this.ambientLight = parseRGBA(ilumation[0], 'ambient','ILLUMINATION');
-	this.backgroundLight = parseRGBA(ilumation[0], 'background','ILLUMINATION');
-
-}
 
 MySceneGraph.prototype.parseTextures= function(rootElement){
 	//TODO add console.logs
@@ -198,7 +118,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement){
 		textures[id] = new MyTexture(this, id, path, s, t);
 	}
 
-}
+};
 
 MySceneGraph.prototype.parseMaterials= function(rootElement){
 	var materialsElement = rootElement.getElementsByTagName('MATERIALS');
@@ -218,34 +138,34 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 		var shininess = this.reader.getFloat(shininessElem[0], 'value', true);
 
 
-		var specular = parseRGBA(materialNode[i], 'specular', 'MATERIAL');
-		var diffuse = parseRGBA(materialNode[i], 'diffuse', 'MATERIAL');
-		var ambient = parseRGBA(materialNode[i], 'ambient', 'MATERIAL');
-		var emission = parseRGBA(materialNode[i], 'emission', 'MATERIAL');
+		var specular = this.parseRGBA(materialNode[i], 'specular', 'MATERIAL');
+		var diffuse = this.parseRGBA(materialNode[i], 'diffuse', 'MATERIAL');
+		var ambient = this.parseRGBA(materialNode[i], 'ambient', 'MATERIAL');
+		var emission = this.parseRGBA(materialNode[i], 'emission', 'MATERIAL');
+	}
+};
 	
-<<<<<<< HEAD
-=======
 
-MySceneGraph.prototype.parseIlumination= function(rootElement){
+MySceneGraph.prototype.parseIllumination= function(rootElement){
 	//TODO add console.logs
 	var illumination = rootElement.getElementsByTagName('ILLUMINATION');
-	if (illumination == null) return onXMLError("ILLUMINATION element is missing.");
+	if (illumination == null) return this.onXMLError("ILLUMINATION element is missing.");
 
-	if (ilumination[0].children.length != 2) onXMLError("number of elements in 'ILLUMINATION' different from two.");
+	if (illumination[0].children.length != 2) this.onXMLError("number of elements in 'ILLUMINATION' different from two.");
 	
 
-	this.ambientLight = parseRGBA(illumination[0], 'ambient','ILLUMINATION');
+	this.ambientLight = this.parseRGBA(illumination[0], 'ambient','ILLUMINATION');
 	this.doubleside = this.reader.getBoolean(illumination[0], 'doubleside', true);
-	this.backgroundLight = parseRGBA(illumination[0], 'background','ILLUMINATION');
+	this.backgroundLight = this.parseRGBA(illumination[0], 'background','ILLUMINATION');
 
-}
+};
 
 MySceneGraph.prototype.parseTextures= function(rootElement){
 	var texturesElement = rootElement.getElementsByTagName('TEXTURES');
-	if (texturesElement == null) return onXMLError("TEXTURES element is missing.");
+	if (texturesElement == null) return this.onXMLError("TEXTURES element is missing.");
 	var textureNode = texturesElement[0].getElementsByTagName('TEXTURE');
 	var numberTextures = textureNode.length;
-	if (numberTextures < 1) return onXMLError("number of 'TEXTURE' elements in 'TEXTURES' must be at least 1.");
+	if (numberTextures < 1) return this.onXMLError("number of 'TEXTURE' elements in 'TEXTURES' must be at least 1.");
 
 	this.textures = [];
 	
@@ -254,25 +174,24 @@ MySceneGraph.prototype.parseTextures= function(rootElement){
 		var id = this.reader.getString(textureNode[i], 'id',true);
 
 		var file = textureNode[i].getElementsByTagName('path');
-		if (file == null) return onXMLError("'file' element missing in TEXTURE id = " + id);
+		if (file == null) return this.onXMLError("'file' element missing in TEXTURE id = " + id);
 		var path = this.reader.getString(file[0], 'path', true);
 
 		var amplifFactor = textureNode[i].getElementsByTagName('amplif_factor');
-		if (amplifFactor == null) return onXMLError("'amplif_factor' element missing in TEXTURE id = " + id + ".");
+		if (amplifFactor == null) return this.onXMLError("'amplif_factor' element missing in TEXTURE id = " + id + ".");
 		var s = this.reader.getString(amplifFactor[0], 's', true);
 		var t = this.reader.getString(amplifFactor[0], 't', true);
 		textures[id] = new MyTexture(this, id, path, s, t);
-		//textures[id].enable();
 	}
 
-}
+};
 
 MySceneGraph.prototype.parseMaterials= function(rootElement){
 	var materialsElement = rootElement.getElementsByTagName('MATERIALS');
 	if (materialsElement == null) return onXMLError("MATERIALS element is missing.");
 	var materialNode = materialsElement[0].getElementsByTagName('MATERIAL');
 	var numberMaterials = materialNode.length;
-	if (numberMaterials < 1) return onXMLError("number of 'MATERIAL' elements in 'MATERIALS' must be at least 1.");
+	if (numberMaterials < 1) return this.onXMLError("number of 'MATERIAL' elements in 'MATERIALS' must be at least 1.");
 
 	this.materials = [];
 
@@ -280,16 +199,15 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 		var id = this.reader.getString(materialNode[i], 'id',true);
 		
 		var shininessElem = materialNode[i].getElementsByTagName('shininess');
-		if (shininessElem == null) return onXMLError("'shininess' element missing in MATERIAL id = " + id +".");
+		if (shininessElem == null) return this.onXMLError("'shininess' element missing in MATERIAL id = " + id +".");
 		var shininess = this.reader.getFloat(shininessElem[0], 'value', true);
 
 
-		var specular = parseRGBA(materialNode[i], 'specular', 'MATERIAL');
-		var diffuse = parseRGBA(materialNode[i], 'diffuse', 'MATERIAL');
-		var ambient = parseRGBA(materialNode[i], 'ambient', 'MATERIAL');
-		var emission = parseRGBA(materialNode[i], 'emission', 'MATERIAL');
+		var specular = this.parseRGBA(materialNode[i], 'specular', 'MATERIAL');
+		var diffuse = this.parseRGBA(materialNode[i], 'diffuse', 'MATERIAL');
+		var ambient = this.parseRGBA(materialNode[i], 'ambient', 'MATERIAL');
+		var emission = this.parseRGBA(materialNode[i], 'emission', 'MATERIAL');
 	
->>>>>>> master
 		var newMaterial = new MyMaterial(this, id);
 		newMaterial.setShininess(shininess);
 		newMaterial.setSpecular(specular[0], specular[1], specular[2], specular[3]);
@@ -298,32 +216,26 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 
 		this.materials[id] = newMaterial;
 	}
-}
+};
 
 
 MySceneGraph.prototype.parseLights= function(rootElement){
 	var lightElement = rootElement.getElementsByTagName('LIGHTS');
-<<<<<<< HEAD
 	if (lightElement == null) return "LIGHTS element is missing.";
-	var lightNode = materialsElement[0].getElementsByTagName('LIGHT');
+	var lightNode = lightElement[0].getElementsByTagName('LIGHT');
 	var numberLights = lightNode.length;
 	if (numberLights < 1) return "number of 'LIGHT' elements in 'LIGHTS' must be at least 1.";
-=======
-	if (lightElement == null) return onXMLError("LIGHTS element is missing.");
-	var lightNode = materialsElement[0].getElementsByTagName('LIGHT');
-	var numberLights = lightNode.length;
-	if (numberLights < 1) return onXMLError("number of 'LIGHT' elements in 'LIGHTS' must be at least 1.");
->>>>>>> master
+
 	this.lights = [];
 	for(var i = 0; i <numberLights; i++){
 		var id = lightNode[i].id;
 		var enable = this.reader.getBoolean(lightNode[i], 'enable', true);
-		var position = parseLightPosition(lightNode[i], 'position', 'LIGHT');
-		var ambient = parseRGBA(lightNode[i], 'ambient', 'LIGHT');
-		var diffuse = parseRGBA(lightNode[i], 'diffuse', 'LIGHT');
-		var specular = parseRGBA(lightNode[i], 'specular', 'LIGHT');
+		var position = this.parseLightPosition(lightNode[i], 'position', 'LIGHT');
+		var ambient = this.parseRGBA(lightNode[i], 'ambient', 'LIGHT');
+		var diffuse = this.parseRGBA(lightNode[i], 'diffuse', 'LIGHT');
+		var specular = this.parseRGBA(lightNode[i], 'specular', 'LIGHT');
 
-		this.lights[id] = new newCGFlight( this, lightNode[i].id );
+		this.lights[id] = new CGFlight( this, lightNode[i].id );
 		if(enable)
 			this.lights[id].enable();
 		else
@@ -334,18 +246,14 @@ MySceneGraph.prototype.parseLights= function(rootElement){
 		this.lights[id].setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
 		this.lights[id].setSpecular(specular[0], specular[1], specular[2], specular[3]);		
 	}
-<<<<<<< HEAD
-=======
-
-
-}
+};
 
 MySceneGraph.prototype.parseLeaves= function(rootElement){
 	var leavesElement = rootElement.getElementsByTagName('LEAVES');
-	if (leavesElement == null) return onXMLError("LEAVES element is missing.");
+	if (leavesElement == null) return this.onXMLError("LEAVES element is missing.");
 	var leafNode = leavesElement[0].getElementsByTagName('LEAF');
 	var numberLeaves = leafNode.length;
-	if (numberLeaves < 1) return onXMLError("number of 'LEAF' elements in 'LEAVES' must be at least 1.");
+	if (numberLeaves < 1) return this.onXMLError("number of 'LEAF' elements in 'LEAVES' must be at least 1.");
 
 	this.leaves = [];
 
@@ -354,58 +262,57 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 		var type = this.reader.getString(leafNode[i], 'type', true);
 		switch(type){
 			case 'rectangle':
-				this.leaves[id] = parseRectangle(leafNode[i]);
+				this.leaves[id] = this.parseRectangle(leafNode[i]);
 				break;
 			case 'cylinder':
-				this.leaves[id] = parseCylinder(leafNode[i]);
+				this.leaves[id] = this.parseCylinder(leafNode[i]);
 				break;
 			case 'sphere':
-				this.leaves[id] = parseSphere(leafNode[i]);
+				this.leaves[id] = this.parseSphere(leafNode[i]);
 				break;
 			case 'triangle':
-				this.leaves[id] = parseTriangle(leafNode[i]);
+				this.leaves[id] = this.parseTriangle(leafNode[i]);
 				break;
 			default:
-				return onXMLError("invalid 'type' element in 'LEAF' id= " + id + ".");
+				return this.onXMLError("invalid 'type' element in 'LEAF' id= " + id + ".");
 		}
 	}
 }
 
 MySceneGraph.prototype.parseNodeList= function(rootElement){
 	var nodesElement = rootElement.getElementsByTagName('NODES');
-	if (nodesElement == null) return onXMLError("'NODES' element  is missing.");
+	if (nodesElement == null) return this.onXMLError("'NODES' element  is missing.");
 
 	var rootNode = nodesElement[0].getElementsByTagName('ROOT');
-	if (rootNode == null) return onXMLError("'ROOT' element in 'NODES' missing.");	
+	if (rootNode == null) return this.onXMLError("'ROOT' element in 'NODES' missing.");	
 	var rootID = this.reader.getString(rootNode[0], 'id', true);
 
 	var nodeList = nodesElement[0].getElementsByTagName('NODE');
-	if (nodeList.length < 1) return onXMLError("There needs to be at least 1 'NODE' element inside 'NODES'.");	
+	if (nodeList.length < 1) return this.onXMLError("There needs to be at least 1 'NODE' element inside 'NODES'.");	
 	
 	this.nodes = [];
 
 	for(var i = 0; i < nodesList.length; i++ ){
-		this.nodes[nodeList[i].id] = parseNode(nodeList[i]);
+		this.nodes[nodeList[i].id] = this.parseNode(nodeList[i]);
 	}
 
-	if (this.nodes[rootID] == null) return onXMLError("'ROOT' id ="+rootNodeID+" doesn't exist as 'NODE' element.");
-
-}
+	if (this.nodes[rootID] == null) return this.onXMLError("'ROOT' id ="+rootNodeID+" doesn't exist as 'NODE' element.");
+};
 
 MySceneGraph.prototype.parseNode= function(node){
-	if(this.leaves[node.id] != null) return onXMLError("'NODE' id =" + node.id + " already exists as a 'LEAF'.");
+	if(this.leaves[node.id] != null) return this.onXMLError("'NODE' id =" + node.id + " already exists as a 'LEAF'.");
 	
-	var material = parseNodeMaterial(node);
-	var texture = parseTexture(node);
+	var material = this.parseNodeMaterial(node);
+	var texture = this.parseNodeTexture(node);
 	var i = 2;
 	var transformations=[];
 	while(node.children[i].tagName != 'DESCENDANTS' && i < node.children.length){
-		transformations[i-2] = parseTransformation(node.children[i]);
+		transformations[i-2] = this.parseTransformation(node.children[i]);
 		i++;
 	}
 	
 	var descendantsElement = node.getElementsByTagName('DESCENDANTS');
-	if (descendantsElement.length < 1) return onXMLError("Error in 'NODE' id =" + node.id + ". Number of 'DESCENDANTS' needs to be at least 1.");
+	if (descendantsElement.length < 1) return this.onXMLError("Error in 'NODE' id =" + node.id + ". Number of 'DESCENDANTS' needs to be at least 1.");
 	
 	var descendants = [];
 	for(var j = 0; j < descendantsElement.length; j++){
@@ -413,11 +320,11 @@ MySceneGraph.prototype.parseNode= function(node){
 	}
 
 	return new MyNode(this.scene, material, texture, transformations,descendants);
-}
+};
 
 MySceneGraph.prototype.parseNodeMaterial= function(node){
 	var materialElement = node.getElementsByTagName('MATERIAL');
-	if (materialElement == null) return onXMLError("'MATERIAL' element missing in 'NODE' id= " + node.id);
+	if (materialElement == null) return this.onXMLError("'MATERIAL' element missing in 'NODE' id= " + node.id);
 
 	switch(materialElement[0].id){
 		case "null":
@@ -425,14 +332,15 @@ MySceneGraph.prototype.parseNodeMaterial= function(node){
 			break;
 		default:
 			var material = this.materials[materialElement[0].id];
-			if (material == null) return onXMLError("'MATERIAL' id =" + materialElement.id + "referenced in 'NODE' id= " + node.id + " doesn't exist in 'MATERIALS'");
+			if (material == null) return this.onXMLError("'MATERIAL' id =" + materialElement.id + "referenced in 'NODE' id= " + node.id + " doesn't exist in 'MATERIALS'");
 			return material;	
 			break;
 	}
-}
+};
+
 MySceneGraph.prototype.parseNodeTexture= function(node){
 	var textureElement = node.getElementsByTagName('TEXTURE');
-	if (textureElement == null) return onXMLError("'TEXTURE' element missing in 'NODE' id= " + node.id);
+	if (textureElement == null) return this.onXMLError("'TEXTURE' element missing in 'NODE' id= " + node.id);
 
 	switch(textureElement[0].id){
 		case "clear":
@@ -443,159 +351,120 @@ MySceneGraph.prototype.parseNodeTexture= function(node){
 			break;
 		default:
 			var texture = this.textures[textureElement[0].id];
-			if (texture == null) return onXMLError("'TEXTURE' id =" + textureElement.id + "referenced in 'NODE' id= " + node.id + " doesn't exist in 'TEXTURES'");
+			if (texture == null) return this.onXMLError("'TEXTURE' id =" + textureElement.id + "referenced in 'NODE' id= " + node.id + " doesn't exist in 'TEXTURES'");
 			return texture;	
 			break;
 	}
-}
+};
 
 MySceneGraph.prototype.parseRectangle= function(node){
 	var args = this.reader.getString(node[0], 'args', true);
 	var coords = args.split(" ");
 	if (coords.length != 4)
-		return onXMLError("number of arguments different of 4 in element args in 'LEAF' id= " + node.id);
+		return this.onXMLError("number of arguments different of 4 in element args in 'LEAF' id= " + node.id);
 	return new MyRectangle(this, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseFloat(coords[3]));
-}
+};
 
 MySceneGraph.prototype.parseTriangle= function(node){
 	var args = this.reader.getString(node[0], 'args', true);
 	var coords = args.split(" ");
 	if (coords.length != 9)
-		return onXMLError("number of arguments different of 9 in element args in 'LEAF' id= " + node.id);
+		return this.onXMLError("number of arguments different of 9 in element args in 'LEAF' id= " + node.id);
 	return new MyTriangle(this, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseFloat(coords[3]), parseFloat(coords[4]), parseFloat(coords[5]), parseFloat(coords[6]), parseFloat(coords[7]), parseFloat(coords[8]));
-}
+};
 
 MySceneGraph.prototype.parseCylinder= function(node){
 	var args = this.reader.getString(node[0], 'args', true);
 	var coords = args.split(" ");
 	if (coords.length != 5)
-		return onXMLError("number of arguments different of 5 in element args in 'LEAF' id= " + node.id);
+		return this.onXMLError("number of arguments different of 5 in element args in 'LEAF' id= " + node.id);
 	return new MyCylinder(this, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseInt(coords[3]), parseInt(coords[4]));
-}
+};
 
 MySceneGraph.prototype.parseSphere= function(node){
 	var args = this.reader.getString(node[0], 'args', true);
 	var coords = args.split(" ");
 	if (coords.length != 3)
-		return onXMLError("number of arguments different of 3 in element args in 'LEAF' id= " + node.id);
-	return new MyCylinder(this, parseFloat(coords[0]), parseInt(coords[1]), parseInt(coords[2]));
-}
+		return this.onXMLError("number of arguments different of 3 in element args in 'LEAF' id= " + node.id);
+	return new MySphere(this, parseFloat(coords[0]), parseInt(coords[1]), parseInt(coords[2]));
+};
 
 
 
 MySceneGraph.prototype.parseTransformation= function(transformation){
 	switch(transformation.tagName){
 		case 'TRANSLATION':
-			return parseTranslation(transformation);
+			return this.parseTranslation(transformation);
 		case 'ROTATION':
-			return parseRotation(transformation);
+			return this.parseRotation(transformation);
 		case 'SCALE':
-			return parseScale(transformation);
+			return this.parseScale(transformation);
 		default:
-			return onXMLError('Tag ' + transformation.tagName + 'not accepted in here');
+			return this.onXMLError('Tag ' + transformation.tagName + 'not accepted in here');
 			break;
 	}
-}
+};
 
 MySceneGraph.prototype.parseTranslation= function(node){
-	var x = this.reader.getFloat(node[0], 'x', true);
-	var y = this.reader.getFloat(node[0], 'y', true);
-	var z = this.reader.getFloat(node[0], 'z', true);
+	var x = this.reader.getFloat(node, 'x', true);
+	var y = this.reader.getFloat(node, 'y', true);
+	var z = this.reader.getFloat(node, 'z', true);
 	return new MyTranslation(this.scene, x, y, z);
-}
+};
 
 MySceneGraph.prototype.parseRotation= function(node){
-	var axis = this.reader.getString(node[0], 'axis', true);
-	var angle = this.reader.getFloat(node[0], 'angle', true);
+	var axis = this.reader.getString(node, 'axis', true);
+	var angle = this.reader.getFloat(node, 'angle', true);
 	return new MyRotation(this.scene, axis, angle);
-}
+};
 
 MySceneGraph.prototype.parseScale= function(node){
-	var sx = this.reader.getFloat(node[0], 'sx', true);
-	var sy = this.reader.getFloat(node[0], 'sy', true);
-	var sz = this.reader.getFloat(node[0], 'sz', true);
+	var sx = this.reader.getFloat(node, 'sx', true);
+	var sy = this.reader.getFloat(node, 'sy', true);
+	var sz = this.reader.getFloat(node, 'sz', true);
 	return new MyScale(this.scene, sx, sy, sz);
->>>>>>> master
-}
+};
 
 MySceneGraph.prototype.parseLightPosition= function(node, element,nodeName){
 	var element = node.getElementsByTagName(element);
-<<<<<<< HEAD
-	if (element == null) return "'" + element + "' element missing in " + nodeName + " id = " + node.id;
+	if (element == null) return this.onXMLError("'" + element + "' element missing in " + nodeName + " id = " + node.id);
 	var position = [];
 
 	position[0] = this.reader.getFloat(element[0],'x', true);
-	if(position[0] > 255 || position[0] < 0) return "'x' attribute in '" + element + "' must be between 0 and 255.";
+	if(position[0] > 255 || position[0] < 0) return this.onXMLError("'x' attribute in '" + element + "' must be between 0 and 255.");
 
 	position[1] = this.reader.getFloat(element[0],'y', true);
-	if(position[1] > 255 || position[1] < 0) return "'y' attribute in '" + element + "' must be between 0 and 255.";
+	if(position[1] > 255 || position[1] < 0) return this.onXMLError("'y' attribute in '" + element + "' must be between 0 and 255.");
 
 	position[2] = this.reader.getFloat(element[0],'z', true);
-	if(position[2] > 255 || position[2] < 0) return "'z' attribute in '" + element + "' must be between 0 and 255.";
+	if(position[2] > 255 || position[2] < 0) return this.onXMLError("'z' attribute in '" + element + "' must be between 0 and 255.");
 
 	position[3] = this.reader.getFloat(element[0],'w', true);
-	if(position[3] > 1 || position[3]<0) return "'w' attribute in '"+ element + "' must be between 0 and 1.";
-=======
-	if (element == null) return onXMLError("'" + element + "' element missing in " + nodeName + " id = " + node.id);
-	var position = [];
-
-	position[0] = this.reader.getFloat(element[0],'x', true);
-	if(position[0] > 255 || position[0] < 0) return onXMLError("'x' attribute in '" + element + "' must be between 0 and 255.");
-
-	position[1] = this.reader.getFloat(element[0],'y', true);
-	if(position[1] > 255 || position[1] < 0) return onXMLError("'y' attribute in '" + element + "' must be between 0 and 255.");
-
-	position[2] = this.reader.getFloat(element[0],'z', true);
-	if(position[2] > 255 || position[2] < 0) return onXMLError("'z' attribute in '" + element + "' must be between 0 and 255.");
-
-	position[3] = this.reader.getFloat(element[0],'w', true);
-	if(position[3] > 1 || position[3]<0) return onXMLError("'w' attribute in '"+ element + "' must be between 0 and 1.");
->>>>>>> master
+	if(position[3] > 1 || position[3]<0) return this.onXMLError("'w' attribute in '"+ element + "' must be between 0 and 1.");
 
 	return position;
-}
+};
 
 MySceneGraph.prototype.parseRGBA= function(node, element, nodeName){
 	var element = node.getElementsByTagName(element);
-<<<<<<< HEAD
-	if (element == null) return "'" + element + "' element missing in " + nodeName + " id = " + node.id;
+	if (element == null) return this.onXMLError("'" + element + "' element missing in " + nodeName + " id = " + node.id);
 	var rgba = [];
 
 	rgba[0] = this.reader.getFloat(element[0],'r', true);
-	if(rgba[0] > 255 || rgba[0] < 0) return "'r' attribute in '" + element + "' must be between 0 and 255.";
+	if(rgba[0] > 255 || rgba[0] < 0) return this.onXMLError("'r' attribute in '" + element + "' must be between 0 and 255.");
 
 	rgba[1] = this.reader.getFloat(element[0],'g', true);
-	if(rgba[1] > 255 || rgba[1] < 0) return "'g' attribute in '" + element + "' must be between 0 and 255.";
+	if(rgba[1] > 255 || rgba[1] < 0) return this.onXMLError("'g' attribute in '" + element + "' must be between 0 and 255.");
 
 	rgba[2] = this.reader.getFloat(element[0],'b', true);
-	if(rgba[2] > 255 || rgba[2] < 0) return "'b' attribute in '" + element + "' must be between 0 and 255.";
+	if(rgba[2] > 255 || rgba[2] < 0) return this.onXMLError("'b' attribute in '" + element + "' must be between 0 and 255.");
 
 	rgba[3] = this.reader.getFloat(element[0],'a', true);
-	if(rgba[3] > 1 || rgba[3]<0) return "'a' attribute in '"+ element + "' must be between 0 and 1.";
-=======
-	if (element == null) return onXMLError("'" + element + "' element missing in " + nodeName + " id = " + node.id);
-	var rgba = [];
-
-	rgba[0] = this.reader.getFloat(element[0],'r', true);
-	if(rgba[0] > 255 || rgba[0] < 0) return onXMLError("'r' attribute in '" + element + "' must be between 0 and 255.");
-
-	rgba[1] = this.reader.getFloat(element[0],'g', true);
-	if(rgba[1] > 255 || rgba[1] < 0) return onXMLError("'g' attribute in '" + element + "' must be between 0 and 255.");
-
-	rgba[2] = this.reader.getFloat(element[0],'b', true);
-	if(rgba[2] > 255 || rgba[2] < 0) return onXMLError("'b' attribute in '" + element + "' must be between 0 and 255.");
-
-	rgba[3] = this.reader.getFloat(element[0],'a', true);
-	if(rgba[3] > 1 || rgba[3]<0) return onXMLError("'a' attribute in '"+ element + "' must be between 0 and 1.");
->>>>>>> master
+	if(rgba[3] > 1 || rgba[3]<0) return this.onXMLError("'a' attribute in '"+ element + "' must be between 0 and 1.");
 
 	return rgba;
-}
+};
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 /*
  * Callback to be executed on any read error
  */
