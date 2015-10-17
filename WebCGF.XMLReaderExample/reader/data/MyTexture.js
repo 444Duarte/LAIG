@@ -3,13 +3,12 @@
  * @constructor
  */
 function MyTexture(scene, id, path, s, t) {
-    CGFappearance.call(this, scene);
+    CGFtexture.call(this, scene,path);
 
     this.id = id;
-    this.loadTexture(scene);
     this.s = s;
     this.t = t;
 }
 
-MyTexture.prototype = Object.create(CGFappearance.prototype);
+MyTexture.prototype = Object.create(CGFtexture.prototype);
 MyTexture.prototype.constructor = MyTexture;

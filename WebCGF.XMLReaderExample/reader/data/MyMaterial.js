@@ -3,7 +3,7 @@
  * @constructor
  */
 function MyMaterial(scene, id) {
-    CGFappearance.call(this);
+    CGFappearance.call(this, scene);
 
     this.id = id;
 }

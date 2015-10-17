@@ -11,5 +11,5 @@ function MyTranslation(scene, x, y, z) {
  MyTranslation.prototype.constructor = MyTranslation;
 
  MyTranslation.prototype.apply = function(){
- 	this.scene.translation(x,y,z);
+ 	this.scene.translate(this.x,this.y,this.z);
  };

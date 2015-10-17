@@ -52,10 +52,10 @@ MyScene.prototype.onGraphLoaded = function ()
     this.camera.near = this.graph.frustum[0];
     this.camera.far = this.graph.frustum[1];
 
-    if (this.graph.initials.referenceLength > 0)
+    if (this.graph.reference > 0)
 	   this.axis = new CGFaxis(this, this.graph.reference);
 	   
-	this.gl.clearColor(this.graph.illumination.backgroundLight[0],this.graph.illumination.backgroundLight[1],this.graph.backgroundLight[2],this.graph.backgroundLight[3]);
+	this.gl.clearColor(this.graph.backgroundLight[0],this.graph.backgroundLight[1],this.graph.backgroundLight[2],this.graph.backgroundLight[3]);
 	this.setGlobalAmbientLight(this.graph.ambientLight[0],this.graph.ambientLight[1],this.graph.ambientLight[2],this.graph.ambientLight[3]);
 
     for (var i = 0; i < this.graph.lights.length; ++i) {
@@ -64,7 +64,13 @@ MyScene.prototype.onGraphLoaded = function ()
     	this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
     }
 	
-	this.textures = this.graph
+	this.textures = this.graph.textures;
+	this.materials = this.graph.materials;
+	this.leaves = this.graph.leaves;
+	this.nodes = this.graph.nodes;
+	this.rootID = this.graph.rootID;
+	console.log("rootID="+this.rootID);
+	console.log("Graph Loaded");
 };
 
 MyScene.prototype.display = function () {
@@ -86,6 +92,8 @@ MyScene.prototype.display = function () {
     this.axis.display();
 
     this.setDefaultAppearance();
+
+    console.log("Ended background, camera and axis setup")
     
     // ---- END Background, camera and axis setup
 
@@ -95,7 +103,8 @@ MyScene.prototype.display = function () {
     if (this.graph.loadedOk)
     {
         this.lights[0].update();
-    };  
+        this.nodes[this.rootID].display();
+    }; 
 
     this.shader.unbind();
 };

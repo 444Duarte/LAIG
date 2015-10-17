@@ -31,12 +31,18 @@ MySceneGraph.prototype.onXMLReady=function()
 	// Here should go the calls for different functions to parse the various blocks
 	var error = this.parseInitials(rootElement);
 	error = this.parseIllumination(rootElement);
+	console.log("Illumination loaded");
 	error = this.parseLights(rootElement);
+	console.log("Lights loaded");
 	error = this.parseTextures(rootElement);
+	console.log("Textures loaded");
 	error = this.parseMaterials(rootElement);
+	console.log("Materials loaded");
 	error = this.parseLeaves(rootElement);
-	error = this.parseNodes(rootElement);
-
+	console.log("Leaves loaded");
+	error = this.parseNodeList(rootElement);
+	console.log("Nodes loaded");
+	
 	if (error != null) {
 		this.onXMLError(error);
 		return;
@@ -232,6 +238,7 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 			default:
 				return "invalid 'type' element in 'LEAF' id= " + id + ".";
 		}
+		console.log("'LEAF' id="+id+" loaded.");
 	}
 }
 
@@ -242,18 +249,18 @@ MySceneGraph.prototype.parseNodeList= function(rootElement){
 
 	var rootNode = nodesElement[0].getElementsByTagName('ROOT');
 	if (rootNode == null) return ("'ROOT' element in 'NODES' missing.");	
-	var rootID = this.reader.getString(rootNode[0], 'id', true);
+	this.rootID = this.reader.getString(rootNode[0], 'id', true);
 
 	var nodeList = nodesElement[0].getElementsByTagName('NODE');
 	if (nodeList.length < 1) return this.onXMLError("There needs to be at least 1 'NODE' element inside 'NODES'.");	
 	
 	this.nodes = [];
 
-	for(var i = 0; i < nodesList.length; i++ ){
+	for(var i = 0; i < nodeList.length; i++ ){
 		this.nodes[nodeList[i].id] = this.parseNode(nodeList[i]);
 	}
 
-	if (this.nodes[rootID] == null) return "'ROOT' id ="+rootNodeID+" doesn't exist as 'NODE' element.";
+	if (this.nodes[this.rootID] == null) return "'ROOT' id ="+rootNodeID+" doesn't exist as 'NODE' element.";
 };
 
 MySceneGraph.prototype.parseNode= function(node){
@@ -269,14 +276,16 @@ MySceneGraph.prototype.parseNode= function(node){
 	}
 	
 	var descendantsElement = node.getElementsByTagName('DESCENDANTS');
-	if (descendantsElement.length < 1) return this.onXMLError("Error in 'NODE' id =" + node.id + ". Number of 'DESCENDANTS' needs to be at least 1.");
+	if (descendantsElement == null) return this.onXMLError("'DESCENDANTS' element inside 'NODE' id =" + node.id + " missing.");
+	var descendElem = descendantsElement[0].getElementsByTagName('DESCENDANT'); 
+	if (descendElem.length < 1) return this.onXMLError("Error in 'NODE' id =" + node.id + ". Number of 'DESCENDANT' inside 'DESCENDANTS' needs to be at least 1.");
 	
 	var descendants = [];
-	for(var j = 0; j < descendantsElement.length; j++){
-		this.descendants[j] = descendantsElement[j].id;
+	for(var j = 0; j < descendElem.length; j++){
+		descendants[j] = descendElem[j].id;
 	}
 
-	return new MyNode(this.scene, material, texture, transformations,descendants);
+	return new MyNode(this.scene,node.id, material, texture, transformations,descendants);
 };
 
 MySceneGraph.prototype.parseNodeMaterial= function(node){
@@ -285,11 +294,11 @@ MySceneGraph.prototype.parseNodeMaterial= function(node){
 
 	switch(materialElement[0].id){
 		case "null":
-			return "null";
+			return null;
 			break;
 		default:
 			var material = this.materials[materialElement[0].id];
-			if (material == null) return this.onXMLError("'MATERIAL' id =" + materialElement.id + "referenced in 'NODE' id= " + node.id + " doesn't exist in 'MATERIALS'");
+			if (material == null) return this.onXMLError("'MATERIAL' id =" + materialElement[0].id + "referenced in 'NODE' id= " + node.id + " doesn't exist in 'MATERIALS'");
 			return material;	
 			break;
 	}
@@ -304,7 +313,7 @@ MySceneGraph.prototype.parseNodeTexture= function(node){
 			return "clear";
 			break;
 		case "null":
-			return "null";
+			return null;
 			break;
 		default:
 			var texture = this.textures[textureElement[0].id];
@@ -319,7 +328,7 @@ MySceneGraph.prototype.parseRectangle= function(node){
 	var coords = args.split(" ");
 	if (coords.length != 4)
 		return this.onXMLError("number of arguments different of 4 in element args in 'LEAF' id= " + node.id);
-	return new MyRectangle(this, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseFloat(coords[3]));
+	return new MyRectangle(this.scene, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseFloat(coords[3]));
 };
 
 MySceneGraph.prototype.parseTriangle= function(node){
@@ -327,7 +336,7 @@ MySceneGraph.prototype.parseTriangle= function(node){
 	var coords = args.split(" ");
 	if (coords.length != 9)
 		return this.onXMLError("number of arguments different of 9 in element args in 'LEAF' id= " + node.id);
-	return new MyTriangle(this, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseFloat(coords[3]), parseFloat(coords[4]), parseFloat(coords[5]), parseFloat(coords[6]), parseFloat(coords[7]), parseFloat(coords[8]));
+	return new MyTriangle(this.scene, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseFloat(coords[3]), parseFloat(coords[4]), parseFloat(coords[5]), parseFloat(coords[6]), parseFloat(coords[7]), parseFloat(coords[8]));
 };
 
 MySceneGraph.prototype.parseCylinder= function(node){
@@ -335,7 +344,7 @@ MySceneGraph.prototype.parseCylinder= function(node){
 	var coords = args.split(" ");
 	if (coords.length != 5)
 		return this.onXMLError("number of arguments different of 5 in element args in 'LEAF' id= " + node.id);
-	return new MyCylinder(this, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseInt(coords[3]), parseInt(coords[4]));
+	return new MyCylinder(this.scene, parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseInt(coords[3]), parseInt(coords[4]));
 };
 
 MySceneGraph.prototype.parseSphere= function(node){
@@ -343,7 +352,7 @@ MySceneGraph.prototype.parseSphere= function(node){
 	var coords = args.split(" ");
 	if (coords.length != 3)
 		return this.onXMLError("number of arguments different of 3 in element args in 'LEAF' id= " + node.id);
-	return new MySphere(this, parseFloat(coords[0]), parseInt(coords[1]), parseInt(coords[2]));
+	return new MySphere(this.scene, parseFloat(coords[0]), parseInt(coords[1]), parseInt(coords[2]));
 };
 
 
