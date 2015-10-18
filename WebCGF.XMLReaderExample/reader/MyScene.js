@@ -4,9 +4,7 @@
  * @param scene - The scene
  */
 function MyScene(scene){
-
 	CGFscene.call(this);
-
 };
 
 /**
@@ -28,7 +26,7 @@ MyScene.prototype.init = function (application) {
     this.initCameras();
 	this.enableTextures(true);
 
-    this.initLights();
+	this.lightsEnabled = [];
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -39,16 +37,6 @@ MyScene.prototype.init = function (application) {
 
 
 	this.axis=new CGFaxis(this);
-};
-
-/**
- * Binds and unbinds the shader.
- */
-MyScene.prototype.initLights = function () {
-
-    this.shader.bind();
-
-    this.shader.unbind();
 };
 
 /**
@@ -88,11 +76,12 @@ MyScene.prototype.onGraphLoaded = function ()
 	   
 	this.gl.clearColor(this.graph.backgroundLight[0],this.graph.backgroundLight[1],this.graph.backgroundLight[2],this.graph.backgroundLight[3]);
 	this.setGlobalAmbientLight(this.graph.ambientLight[0],this.graph.ambientLight[1],this.graph.ambientLight[2],this.graph.ambientLight[3]);
-
+	
     for (var i = 0; i < this.graph.lights.length; ++i) {
     	this.lights[i] = this.graph.lights[i];
     	this.lights[i].setVisible(true);
-    	this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
+    	console.log("loaded light id="+this.lights[i].id);
+    	this.lightsEnabled[i] = this.lights[i].enabled;
     }
 	
 	this.textures = this.graph.textures;
@@ -100,8 +89,11 @@ MyScene.prototype.onGraphLoaded = function ()
 	this.leaves = this.graph.leaves;
 	this.nodes = this.graph.nodes;
 	this.rootID = this.graph.rootID;
-	console.log("rootID="+this.rootID);
 	console.log("Graph Loaded");
+
+	this.interface.onGraphLoaded();
+	console.log("Interface loaded");
+
 };
 
 /**
@@ -141,4 +133,18 @@ MyScene.prototype.display = function () {
     }; 
 
     this.shader.unbind();
+};
+
+MyScene.prototype.setInterface = function(newInterface) {
+	this.interface = newInterface;
+}
+
+
+MyScene.prototype.updateLight= function(lightID, state){
+	for (var i = 0; i < this.lights.length; i++) {
+		if (i == lightId) {
+			state ? light.enable() : light.disable();
+			return;
+		}
+	}
 };
