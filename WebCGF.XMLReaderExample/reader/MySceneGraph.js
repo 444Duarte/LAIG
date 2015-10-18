@@ -245,16 +245,17 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
         var diffuse = this.parseRGBA(lightNode[i], 'diffuse', 'LIGHT');
         var specular = this.parseRGBA(lightNode[i], 'specular', 'LIGHT');
         
-        this.lights[id] = new CGFlight(this.scene,lightNode[i].id);
+        this.lights[i] = new MyLight(this.scene,i,id);        
         if (enable)
-            this.lights[id].enable();
+            this.lights[i].enable();
         else
-            this.lights[id].disable();
+            this.lights[i].disable();
         
-        this.lights[id].setPosition(position[0], position[1], position[2], position[3]);
-        this.lights[id].setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
-        this.lights[id].setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
-        this.lights[id].setSpecular(specular[0], specular[1], specular[2], specular[3]);
+        this.lights[i].setPosition(position[0], position[1], position[2], position[3]);
+        this.lights[i].setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
+        this.lights[i].setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
+        this.lights[i].setSpecular(specular[0], specular[1], specular[2], specular[3]);
+        console.log("Light id="+this.lights[i]+" parsed");
     }
 }
 ;
