@@ -14,7 +14,7 @@ MyLightsInterface.prototype.init = function(application) {
 MyLightsInterface.prototype.onGraphLoaded = function(){
     var group = this.gui.addFolder('Lights');
     group.open();
-    var lights = this.scene.lightsEnabled;
+    var lights = this.scene.enabledLights;
     
 	for(light in lights){
 	    var self = this;

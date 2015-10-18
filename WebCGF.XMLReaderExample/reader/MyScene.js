@@ -26,7 +26,7 @@ MyScene.prototype.init = function (application) {
     this.initCameras();
 	this.enableTextures(true);
 
-	this.lightsEnabled = [];
+	this.enabledLights = [];
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -81,7 +81,7 @@ MyScene.prototype.onGraphLoaded = function ()
     	this.lights[i] = this.graph.lights[i];
     	this.lights[i].setVisible(true);
     	console.log("loaded light id="+this.lights[i].id);
-    	this.lightsEnabled[i] = this.lights[i].enabled;
+    	this.enabledLights[this.lights[i].id] = this.lights[i].enabled;
     }
 	
 	this.textures = this.graph.textures;
@@ -141,9 +141,15 @@ MyScene.prototype.setInterface = function(newInterface) {
 
 
 MyScene.prototype.updateLight= function(lightID, state){
-	for (var i = 0; i < this.lights.length; i++) {
-		if (i == lightId) {
-			state ? light.enable() : light.disable();
+	for (var i=0; i < this.lights.length; i++) {
+		if (this.lights[i].id == lightID) {
+			if(state) {
+				console.log("Enable light="+this.lights[i].id);
+				this.lights[i].enable()
+			}else{
+				console.log("Disable light="+this.lights[i].id);
+				this.lights[i].disable();
+			}
 			return;
 		}
 	}
