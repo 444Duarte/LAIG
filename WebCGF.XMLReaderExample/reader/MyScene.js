@@ -1,12 +1,27 @@
+/**
+ * MyScene constructor
+ * @constructor
+ * @param scene - The scene
+ */
 function MyScene(scene){
 
 	CGFscene.call(this);
 
 };
 
+/**
+ * Stances that MyScene has the properties of a CGFscene.
+*/
 MyScene.prototype = Object.create(CGFscene.prototype);
+
+/**
+ * Creates a MyScene.
+ */
 MyScene.prototype.constructor = MyScene;
 
+/**
+ * Creates the axis on the object MyScene and enables all of the required functions to print the objects on the screen, such as the backface culling, enable textures, and the depth test.
+ */
 MyScene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
@@ -26,6 +41,9 @@ MyScene.prototype.init = function (application) {
 	this.axis=new CGFaxis(this);
 };
 
+/**
+ * Binds and unbinds the shader.
+ */
 MyScene.prototype.initLights = function () {
 
     this.shader.bind();
@@ -33,10 +51,16 @@ MyScene.prototype.initLights = function () {
     this.shader.unbind();
 };
 
+/**
+ * Creates the camera.
+ */
 MyScene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
+/**
+ * Creates a default appearance.
+ */
 MyScene.prototype.setDefaultAppearance = function () {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -46,6 +70,13 @@ MyScene.prototype.setDefaultAppearance = function () {
 
 // Handler called when the graph is finally loaded. 
 // As loading is asynchronous, this may be called already after the application has started the run loop
+
+/**
+ * Handler that is called when the graph is loaded.
+ * Switches all of the lights that exist with the ones on the graph.
+ * Sets the background and ambient light.
+ * Sets the textures, materials, leaves, nodes ad rootID that exist only on the graph.
+ */
 MyScene.prototype.onGraphLoaded = function () 
 {
 
@@ -73,6 +104,9 @@ MyScene.prototype.onGraphLoaded = function ()
 	console.log("Graph Loaded");
 };
 
+/**
+ * Clears image, draws axis, updates the lights and displays all of the nodes.
+ */
 MyScene.prototype.display = function () {
     // ---- BEGIN Background, camera and axis setup
     this.shader.bind();

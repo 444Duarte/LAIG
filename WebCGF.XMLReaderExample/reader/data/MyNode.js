@@ -1,3 +1,12 @@
+/**
+ * Creates MyNode
+ * @constructor
+ * @param scene - The scene
+ * @param {MyMaterial} material - the material the node has
+ * @param {MyTexture} texture - the texture the node has
+ * @param {MyTransformation} transformations - the transformations the node suffers
+ * @param {MyNode} descendants - the descendants the node has
+ */
 function MyNode(scene,id, material, texture, transformations, descendants) {
  	CGFobject.call(this,scene);
 	this.id= id;
@@ -8,9 +17,21 @@ function MyNode(scene,id, material, texture, transformations, descendants) {
 	this.transformations=transformations;
  };
 
+/**
+ * Stances that MyNode has the properties of a CGFobject.
+*/
 MyNode.prototype = Object.create(CGFobject.prototype);
+
+ /**
+ * Creates a MyNode.
+ */
 MyNode.prototype.constructor = MyNode;
 
+/**
+ * Displays a given node, applying transformations, materials and textures.
+ * @param {MyTexture} parent texture - The texture the parent node has
+ * @param {MyTexture} parent texture - The material the parent node has
+ */
 MyNode.prototype.display = function(parentTexture, parentMaterial) {
 
  	var currentTexture;

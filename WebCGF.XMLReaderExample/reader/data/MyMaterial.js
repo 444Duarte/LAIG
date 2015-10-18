@@ -8,5 +8,12 @@ function MyMaterial(scene, id) {
     this.id = id;
 }
 
+/**
+ * Stances that MyMaterial has the properties of a CGFappearance.
+*/
 MyMaterial.prototype = Object.create(CGFappearance.prototype);
+
+/**
+ * Creates a MyMaterial.
+ */
 MyMaterial.prototype.constructor = MyMaterial;

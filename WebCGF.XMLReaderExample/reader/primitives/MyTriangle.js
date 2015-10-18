@@ -1,3 +1,17 @@
+/**
+ * Creates a triangle given three points.
+ * @constructor
+ * @param scene - The scene
+ * @param {number} x1 - The x coord of the first point
+ * @param {number} y1 - The y coord of the first point
+ * @param {number} z1 - The z coord of the first point
+ * @param {number} x2 - The x coord of the second point
+ * @param {number} y2 - The y coord of the second point
+ * @param {number} z2 - The z coord of the second point
+ * @param {number} x3 - The x coord of the third point
+ * @param {number} y3 - The y coord of the third point
+ * @param {number} z3 - The z coord of the third point
+ */
 function MyTriangle(scene, x1,y1,z1,x2,y2,z2,x3,y3,z3){
     CGFobject.call(this,scene);
 
@@ -16,10 +30,20 @@ function MyTriangle(scene, x1,y1,z1,x2,y2,z2,x3,y3,z3){
     this.initBuffers();
 }
 
+/**
+ * Stances that MyTriangle has the properties of a CGFobject.
+*/
 MyTriangle.prototype = Object.create(CGFobject.prototype);
 
+/**
+ * Creates a MyTriangle.
+ */
 MyTriangle.prototype.constructor = MyTriangle;
 
+/**
+ * Initiates the buffers on the object MyTriangle.
+ * Creates a triangle, his normals and his texture coordinates
+ */
 MyTriangle.prototype.initBuffers = function() {
 
     this.vertices = [

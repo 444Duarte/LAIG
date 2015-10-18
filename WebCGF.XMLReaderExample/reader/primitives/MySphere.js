@@ -1,9 +1,10 @@
 /**
- * MySphere
+ * Constructor MySphere
  * @constructor
+ * @param scene - The scene
+ * @param {number} slices - parts along radius
+ * @param {number} stacks - parts per section
  */
-
- /** FALTA O RAIO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! **/
  function MySphere(scene, slices, stacks) {
  	CGFobject.call(this,scene);
 	
@@ -13,9 +14,20 @@
  	this.initBuffers();
  };
 
+/**
+ * Stances that MySphere has the properties of a CGFobject.
+*/
  MySphere.prototype = Object.create(CGFobject.prototype);
+
+ /**
+ * Creates a MySphere.
+ */
  MySphere.prototype.constructor = MySphere;
 
+/**
+ * Initiates the buffers on the object MySphere.
+ * Creates a sphere, his normals and his texture coordinates.
+ */
  MySphere.prototype.initBuffers = function() {
  	this.vertices = [];
  	this.normals = [];

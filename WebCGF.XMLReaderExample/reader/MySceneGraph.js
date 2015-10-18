@@ -1,4 +1,9 @@
-
+/**
+ * Creates a MySceneGraph, reading a file and opening it.
+ * @constructor
+ * @param {string} filename - The LSX file that's meant to be parsed.
+ * @param scene - The scene
+ */
 function MySceneGraph(filename, scene) {
     this.loadedOk = null ;
     
@@ -21,7 +26,7 @@ function MySceneGraph(filename, scene) {
 }
 
 /*
- * Callback to be executed after successful reading
+ * Callback to be executed after successful reading.
  */
 MySceneGraph.prototype.onXMLReady = function() 
 {
@@ -55,7 +60,10 @@ MySceneGraph.prototype.onXMLReady = function()
 }
 ;
 
-
+/**
+ * Parses the initials tag from the LSX, setting the frustum, initial rotations, scale and reference.
+ * @param rootElement - The document element.
+ */
 MySceneGraph.prototype.parseInitials = function(rootElement) {
     //TODO add console.logs
     var elems = rootElement.getElementsByTagName('INITIALS');
@@ -102,9 +110,12 @@ MySceneGraph.prototype.parseInitials = function(rootElement) {
         return "reference element missing in INITIALS";
     this.reference = this.reader.getFloat(reference[0], 'length', true);
 
-}
-;
+};
 
+/**
+ * Parses the illumination tag from the LSX, setting the ambient and background light.
+ * @param rootElement - The document element.
+ */
 MySceneGraph.prototype.parseIllumination = function(rootElement) {
     var illumination = rootElement.getElementsByTagName('ILLUMINATION');
     if (illumination == null )
@@ -122,6 +133,10 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 }
 ;
 
+/**
+ * Parses the textures tag from the LSX, setting the textures from every node, given their s and t amplification factor.
+ * @param rootElement - The document element.
+ */
 MySceneGraph.prototype.parseTextures = function(rootElement) {
     var texturesElement = rootElement.getElementsByTagName('TEXTURES');
     if (texturesElement == null )
@@ -156,6 +171,10 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
 }
 ;
 
+/**
+ * Parses the materials tag from the LSX, setting the materials from every node, given their specular, diffuse, ambient and emission component.
+ * @param rootElement - The document element.
+ */
 MySceneGraph.prototype.parseMaterials = function(rootElement) {
     var materialsElement = rootElement.getElementsByTagName('MATERIALS');
     if (materialsElement == null )
@@ -194,7 +213,10 @@ MySceneGraph.prototype.parseMaterials = function(rootElement) {
 }
 ;
 
-
+/**
+ * Parses the lights tag from the LSX, setting all of the lights present in the scene, given their position and ambient, diffuse and specular component.
+ * @param rootElement - The document element.
+ */
 MySceneGraph.prototype.parseLights = function(rootElement) {
     var lightElement = rootElement.getElementsByTagName('LIGHTS');
     if (lightElement == null )
@@ -235,6 +257,11 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 }
 ;
 
+/**
+ * Parses the leaves tag from the LSX, setting all of the existing primitives, in this case, the rectangle, cylinder, sphere and triangle.
+ * @param rootElement - The document element.
+ * @return leaf - Calls a function to parse the leaf (rectangle, cylinder, sphere or triangle).
+ */
 MySceneGraph.prototype.parseLeaves = function(rootElement) {
     var leavesElement = rootElement.getElementsByTagName('LEAVES');
     if (leavesElement == null )
@@ -271,7 +298,12 @@ MySceneGraph.prototype.parseLeaves = function(rootElement) {
         console.log("'LEAF' id=" + id + " loaded.");
     }
 }
+;
 
+/**
+ * Parses the nodes tag from the LSX, setting a list with nodes, starting on the root.
+ * @param rootElement - The document element.
+ */
 MySceneGraph.prototype.parseNodeList = function(rootElement) {
     var nodesElement = rootElement.getElementsByTagName('NODES');
     if (nodesElement == null )
@@ -299,6 +331,11 @@ MySceneGraph.prototype.parseNodeList = function(rootElement) {
 }
 ;
 
+/**
+ * Parses a single node and their descendants.
+ * @param {MyNode} node - The current parsing node
+ * @return {MyNode} MyNode - The next node to be parsed
+ */
 MySceneGraph.prototype.parseNode = function(node) {
     if (this.leaves[node.id] != null )
         return this.onXMLError("'NODE' id =" + node.id + " already exists as a 'LEAF'.");
@@ -328,6 +365,11 @@ MySceneGraph.prototype.parseNode = function(node) {
 }
 ;
 
+/**
+ * Parses the material the node has.
+ * @param {MyNode} node - The current parsing node
+ * @return material - The material already parsed
+ */
 MySceneGraph.prototype.parseNodeMaterial = function(node) {
     var materialElement = node.getElementsByTagName('MATERIAL');
     if (materialElement == null )
@@ -347,6 +389,11 @@ MySceneGraph.prototype.parseNodeMaterial = function(node) {
 }
 ;
 
+/**
+ * Parses the texture the node has.
+ * @param {MyNode} node - The current parsing node
+ * @return texture - The texture already parsed
+ */
 MySceneGraph.prototype.parseNodeTexture = function(node) {
     var textureElement = node.getElementsByTagName('TEXTURE');
     if (textureElement == null )
@@ -369,6 +416,11 @@ MySceneGraph.prototype.parseNodeTexture = function(node) {
 }
 ;
 
+/**
+ * Parses the leaf rectangle.
+ * @param {MyNode} node - The current parsing node
+ * @return MyRectangle
+ */
 MySceneGraph.prototype.parseRectangle = function(node) {
     var args = this.reader.getString(node, 'args', true);
     var coords = args.split(" ");
@@ -378,6 +430,11 @@ MySceneGraph.prototype.parseRectangle = function(node) {
 }
 ;
 
+/**
+ * Parses the leaf triangle.
+ * @param {MyNode} node - The current parsing node
+ * @return MyTriangle
+ */
 MySceneGraph.prototype.parseTriangle = function(node) {
     var args = this.reader.getString(node, 'args', true);
     var coords = args.split(" ");
@@ -387,6 +444,11 @@ MySceneGraph.prototype.parseTriangle = function(node) {
 }
 ;
 
+/**
+ * Parses the leaf cylinder.
+ * @param {MyNode} node - The current parsing node
+ * @return MyCylinder
+ */
 MySceneGraph.prototype.parseCylinder = function(node) {
     var args = this.reader.getString(node, 'args', true);
     var coords = args.split(" ");
@@ -396,6 +458,11 @@ MySceneGraph.prototype.parseCylinder = function(node) {
 }
 ;
 
+/**
+ * Parses the leaf cylinder.
+ * @param {MyNode} node - The current parsing node
+ * @return MySphere
+ */
 MySceneGraph.prototype.parseSphere = function(node) {
     var args = this.reader.getString(node, 'args', true);
     var coords = args.split(" ");
@@ -405,8 +472,10 @@ MySceneGraph.prototype.parseSphere = function(node) {
 }
 ;
 
-
-
+/**
+ * Parses a transformation.
+ * @param transformation - The transformation to be applied, which can be a rotation, translation or scale.
+ */
 MySceneGraph.prototype.parseTransformation = function(transformation) {
     switch (transformation.tagName) {
     case 'TRANSLATION':
@@ -422,6 +491,11 @@ MySceneGraph.prototype.parseTransformation = function(transformation) {
 }
 ;
 
+/**
+ * Parses a translation.
+ * @param {MyNode} node - The current parsing node
+ * @return MyTranslation
+ */
 MySceneGraph.prototype.parseTranslation = function(node) {
     var x = this.reader.getFloat(node, 'x', true);
     var y = this.reader.getFloat(node, 'y', true);
@@ -430,6 +504,11 @@ MySceneGraph.prototype.parseTranslation = function(node) {
 }
 ;
 
+/**
+ * Parses a rotation.
+ * @param {MyNode} node - The current parsing node
+ * @return MyRotation
+ */
 MySceneGraph.prototype.parseRotation = function(node) {
     var axis = this.reader.getString(node, 'axis', true);
     var angle = this.reader.getFloat(node, 'angle', true);
@@ -437,6 +516,11 @@ MySceneGraph.prototype.parseRotation = function(node) {
 }
 ;
 
+/**
+ * Parses a scaling.
+ * @param {MyNode} node - The current parsing node
+ * @return MyScale
+ */
 MySceneGraph.prototype.parseScale = function(node) {
     var sx = this.reader.getFloat(node, 'sx', true);
     var sy = this.reader.getFloat(node, 'sy', true);
@@ -445,6 +529,12 @@ MySceneGraph.prototype.parseScale = function(node) {
 }
 ;
 
+/**
+ * Parses the position on all of the lights.
+ * @param {MyNode} node - The current parsing node
+ * @param element - The tag
+ * @param {string} nodeName - The name of the node
+ */
 MySceneGraph.prototype.parseLightPosition = function(node, element, nodeName) {
     var element = node.getElementsByTagName(element);
     if (element == null )
@@ -471,6 +561,12 @@ MySceneGraph.prototype.parseLightPosition = function(node, element, nodeName) {
 }
 ;
 
+/**
+ * Parses the RGB component.
+ * @param {MyNode} node - The current parsing node
+ * @param element - The tag
+ * @param {string} nodeName - The name of the node
+ */
 MySceneGraph.prototype.parseRGBA = function(node, element, nodeName) {
     var element = node.getElementsByTagName(element);
     if (element == null )
@@ -499,8 +595,8 @@ MySceneGraph.prototype.parseRGBA = function(node, element, nodeName) {
 
 /*
  * Callback to be executed on any read error
+ * @param {string} message - The error message to be displayed
  */
-
 MySceneGraph.prototype.onXMLError = function(message) {
     console.error("XML Loading Error: " + message);
     this.loadedOk = false;
