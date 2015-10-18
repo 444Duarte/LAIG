@@ -54,10 +54,16 @@ MyTriangle.prototype.initBuffers = function() {
 
     this.indices = [0,1,2];
 
-	var A = vec3.fromValues(this.x1-this.x2, this.y1-this.y2, this.z1-this.z2);
-	var B = vec3.fromValues(this.x1-this.x3, this.y1-this.y3, this.z1-this.z3);
+	var AB = vec3.create();
+    var BC = vec3.create();
+    var CA = vec3.create();
+
+    vec3.sub(AB, vec3.fromValues(this.x2, this.y2, this.z2), vec3.fromValues(this.x1, this.y1, this.z1));
+    vec3.sub(BC, vec3.fromValues(this.x3, this.y3, this.z3), vec3.fromValues(this.x2, this.y2, this.z2));
+    vec3.sub(CA, vec3.fromValues(this.x3, this.y3, this.z3), vec3.fromValues(this.x1, this.y1, this.z1));
+
 	var N = vec3.create();
-	vec3.cross(N, A, B);
+	vec3.cross(N, AB, BC);
 
     vec3.normalize(N, N);
 
@@ -67,8 +73,8 @@ MyTriangle.prototype.initBuffers = function() {
 		N[0], N[1], N[2],
     ];
 
-    var t_temp = (vec3.sqrLen(AB) + vec3.sqrLen(AC) - vec3.sqrLen(BC))/ (2 * vec3.length(AB));
-    var s_temp = Math.sqrt(vec3.sqrLen(AC) - t_temp * t_temp);
+    var t_temp = (vec3.sqrLen(AB) + vec3.sqrLen(CA) - vec3.sqrLen(BC))/ (2 * vec3.length(AB));
+    var s_temp = Math.sqrt(vec3.sqrLen(CA) - t_temp * t_temp);
 
 	this.nonScaledTexCoords = [
         0,0,
