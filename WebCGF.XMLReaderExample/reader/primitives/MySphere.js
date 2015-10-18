@@ -42,10 +42,10 @@
             this.normals.push(0,0,1);
             this.texCoords.push(0.5, 0.5);
 	    }else {
-	        for (var slice = 0; slice < this.slices; ++slice) {
+	        for (var slice = 0; slice < this.slices + 1; ++slice) {
  		    this.vertices.push(Math.cos(slice*alpha)*Math.cos(stack*beta), Math.sin(slice*alpha)*Math.cos(stack*beta), Math.sin(stack*beta));
 	 	    this.normals.push(Math.cos(slice*alpha)*Math.cos(stack*beta), Math.sin(slice*alpha)*Math.cos(stack*beta), Math.sin(stack*beta));
-	 	    this.texCoords.push(Math.cos(stack * beta)*Math.cos(slice * alpha)/2+0.5, 0.5 - Math.cos(stack * beta)*Math.sin(slice * alpha)/2);;
+	 	    this.texCoords.push(slice/this.slices, stack/this.stacks);
 	        }
 	 	}
 	}
@@ -67,3 +67,10 @@
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
  };
+
+/**
+ * Scales the texCoords according to the s and t amplification factor.
+ */
+ MySphere.prototype.scaleTexCoords = function(ampS, ampT) {
+	this.updateTexCoordsGLBuffers();
+};

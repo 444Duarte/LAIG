@@ -62,3 +62,10 @@ MyCylinder.prototype.initBuffers = function() {
     this.primitiveType=this.scene.gl.TRIANGLES;
 	this.initGLBuffers();
  };
+
+/**
+ * Scales the texCoords according to the s and t amplification factor.
+ */
+MyCylinder.prototype.scaleTexCoords = function(ampS, ampT) {
+	this.updateTexCoordsGLBuffers();
+};

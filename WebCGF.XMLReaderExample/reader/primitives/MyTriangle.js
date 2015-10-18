@@ -59,20 +59,38 @@ MyTriangle.prototype.initBuffers = function() {
 	var N = vec3.create();
 	vec3.cross(N, A, B);
 
+    vec3.normalize(N, N);
+
 	this.normals = [
 		N[0], N[1], N[2],
 		N[0], N[1], N[2],
 		N[0], N[1], N[2],
     ];
 
-	// Fix texCoords
-	this.texCoords = [
-		0, 0,
-		1, 0,
-		1, 1
-	]
+    var t_temp = (vec3.sqrLen(AB) + vec3.sqrLen(AC) - vec3.sqrLen(BC))/ (2 * vec3.length(AB));
+    var s_temp = Math.sqrt(vec3.sqrLen(AC) - t_temp * t_temp);
+
+	this.nonScaledTexCoords = [
+        0,0,
+        vec3.length(AB),0,
+        s_temp, t_temp
+    ];
+
+    this.texCoords = this.nonScaledTexCoords.slice(0);
 
     this.primitiveType=this.scene.gl.TRIANGLES;
 
 	this.initGLBuffers();
-}
+};
+
+/**
+ * Scales the texCoords according to the s and t amplification factor, 2 at a time.
+ */
+MyTriangle.prototype.scaleTexCoords = function(ampS, ampT) {
+    for (var i = 0; i < this.texCoords.length; i = i + 2) {
+        this.texCoords[i] = this.nonScaledTexCoords[i] / ampS;
+        this.texCoords[i + 1] = this.nonScaledTexCoords[i+1] / ampT;
+    }
+
+    this.updateTexCoordsGLBuffers();
+};

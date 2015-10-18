@@ -51,13 +51,27 @@ MyRectangle.prototype.initBuffers = function () {
 			0.0, 0.0, 1.0
     ];
 
-    this.texCoords = [
-			0, 1,
-			1, 0, 
-			1, 1,
-			1, 0
+    this.nonScaledTexCoords = [
+    	0, this.y1-this.y2,
+    	this.x2-this.x1, this.y1-this.y2,
+    	this.x2-this.x1, 0,
+    	0, 0
     ];
+
+    this.texCoords = this.nonScaledTexCoords.slice(0);
 		
 	this.primitiveType=this.scene.gl.TRIANGLES;
 	this.initGLBuffers();
+};
+
+/**
+ * Scales the texCoords according to the s and t amplification factor, 2 at a time.
+ */
+MyRectangle.prototype.scaleTexCoords = function(ampS, ampT) {
+	for (var i = 0; i < this.texCoords.length; i = i + 2) {
+		this.texCoords[i] = this.nonScaledTexCoords[i] / ampS;
+		this.texCoords[i + 1] = this.nonScaledTexCoords[i+1] / ampT;
+	}
+
+	this.updateTexCoordsGLBuffers();
 };
