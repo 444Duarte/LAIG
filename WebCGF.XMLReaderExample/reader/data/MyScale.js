@@ -7,9 +7,9 @@ function MyScale(scene, x, y, z) {
 	
  };
 
- MyScale.prototype = Object.create(MyTransformation.prototype);
+ MyScale.prototype = Object.create(CGFobject.prototype);
  MyScale.prototype.constructor = MyScale;
 
  MyScale.prototype.apply = function(){
- 	this.scene.scale(x,y,z);
+ 	this.scene.scale(this.x,this.y,this.z);
  };

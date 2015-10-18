@@ -1,6 +1,6 @@
-function MyNode(scene, material, texture, transformations, descendants) {
+function MyNode(scene,id, material, texture, transformations, descendants) {
  	CGFobject.call(this,scene);
-	
+	this.id= id;
 	this.material=material;
 	this.texture=texture;
 
@@ -24,7 +24,7 @@ MyNode.prototype.display = function(parentTexture, parentMaterial) {
  		currentTexture = null;
  		break;
 
- 		case 'null':
+ 		case null:
  		currentTexture = parentTexture;
  		break;
 
@@ -36,7 +36,7 @@ MyNode.prototype.display = function(parentTexture, parentMaterial) {
 
  	switch(this.material)
  	{
- 		case 'null':
+ 		case null:
  		currentMaterial = parentMaterial;
  		break;
 
@@ -47,22 +47,23 @@ MyNode.prototype.display = function(parentTexture, parentMaterial) {
  	}
 
 
- 	for(var i = 0; i < transformations.length; i++)
+ 	for(var i = 0; i < this.transformations.length; i++)
  	{
  		this.transformations[i].apply();
  	}
- 	for(var i = 0; i < descendants.length; i++)
+ 	for(var i = 0; i < this.descendants.length; i++)
  	{
- 		if (this.scene.nodes[this.descendants[i] == null)
+ 		if (this.scene.nodes[this.descendants[i]] == null)
  		{
  			if (this.scene.leaves[this.descendants[i]] == null)
  			{
- 				this.graph.onXMLerror("'DESCENDANT' id="+this.descendants[i]+" isn't referenced as a 'NODE' or 'LEAF'.\n" );
+ 				console.log("'DESCENDANT' id="+this.descendants[i]+" in 'NODE' id="+this.id+" isn't referenced as a 'NODE' or 'LEAF'.\n" );
+ 				return false;
  			}
- 			currentMaterial.apply();
+ 			if (currentMaterial != null) currentMaterial.apply();
  			if (currentTexture != null) currentTexture.bind();
  			this.scene.leaves[this.descendants[i]].display();
- 			if(currentTexture != null) currentTexture.unbind();
+ 			if (currentTexture != null) currentTexture.unbind();
  			
  		}
  		else

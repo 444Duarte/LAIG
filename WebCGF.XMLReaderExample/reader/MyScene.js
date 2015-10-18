@@ -4,16 +4,16 @@ function MyScene(scene){
 
 };
 
-MyScene.prototype = Object.create(MyScene.prototype);
+MyScene.prototype = Object.create(CGFscene.prototype);
 MyScene.prototype.constructor = MyScene;
 
-XMLscene.prototype.init = function (application) {
+MyScene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
     this.initCameras();
+	this.enableTextures(true);
 
     this.initLights();
-    this.initObjects();
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -22,21 +22,22 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
+
 	this.axis=new CGFaxis(this);
 };
 
-XMLscene.prototype.initLights = function () {
+MyScene.prototype.initLights = function () {
 
     this.shader.bind();
 
     this.shader.unbind();
 };
 
-XMLscene.prototype.initCameras = function () {
+MyScene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
-XMLscene.prototype.setDefaultAppearance = function () {
+MyScene.prototype.setDefaultAppearance = function () {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
@@ -45,25 +46,34 @@ XMLscene.prototype.setDefaultAppearance = function () {
 
 // Handler called when the graph is finally loaded. 
 // As loading is asynchronous, this may be called already after the application has started the run loop
-XMLscene.prototype.onGraphLoaded = function () 
+MyScene.prototype.onGraphLoaded = function () 
 {
 
-    this.camera.near = this.graph.frustum['near'];
-    this.camera.far = this.graph.frustum['far'];
+    this.camera.near = this.graph.frustum[0];
+    this.camera.far = this.graph.frustum[1];
 
     if (this.graph.reference > 0)
-        this.axis = new CGFaxis(this, this.graph.reference);
+	   this.axis = new CGFaxis(this, this.graph.reference);
+	   
+	this.gl.clearColor(this.graph.backgroundLight[0],this.graph.backgroundLight[1],this.graph.backgroundLight[2],this.graph.backgroundLight[3]);
+	this.setGlobalAmbientLight(this.graph.ambientLight[0],this.graph.ambientLight[1],this.graph.ambientLight[2],this.graph.ambientLight[3]);
 
-    this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
-    this.setGlobalAmbientLight(this.graph.ambientLight[0],this.graph.ambientLight[1],this.graph.ambientLight[2],this.graph.ambientLight[3]);
-    
-     for (var i = 0; i < this.graph.lights.length; ++i) {
-        this.lights[i] = this.graph.lights[i];
-        this.lights[i].setVisible(true);
+    for (var i = 0; i < this.graph.lights.length; ++i) {
+    	this.lights[i] = this.graph.lights[i];
+    	this.lights[i].setVisible(true);
+    	this.lightsEnabled[this.lights[i].id] = this.lights[i].enabled;
     }
+	
+	this.textures = this.graph.textures;
+	this.materials = this.graph.materials;
+	this.leaves = this.graph.leaves;
+	this.nodes = this.graph.nodes;
+	this.rootID = this.graph.rootID;
+	console.log("rootID="+this.rootID);
+	console.log("Graph Loaded");
 };
 
-XMLscene.prototype.display = function () {
+MyScene.prototype.display = function () {
     // ---- BEGIN Background, camera and axis setup
     this.shader.bind();
     
@@ -82,6 +92,8 @@ XMLscene.prototype.display = function () {
     this.axis.display();
 
     this.setDefaultAppearance();
+
+    console.log("Ended background, camera and axis setup")
     
     // ---- END Background, camera and axis setup
 
@@ -91,7 +103,8 @@ XMLscene.prototype.display = function () {
     if (this.graph.loadedOk)
     {
         this.lights[0].update();
-    };  
+        this.nodes[this.rootID].display();
+    }; 
 
     this.shader.unbind();
 };

@@ -5,15 +5,15 @@ function MyRotation(scene, axis, degree) {
 	
  };
 
- MyRotation.prototype = Object.create(MyTransformation.prototype);
+ MyRotation.prototype = Object.create(CGFobject.prototype);
  MyRotation.prototype.constructor = MyRotation;
 
  MyRotation.prototype.apply = function(){
  	
- 	var deg2rad = degree * Math.PI / 180;
- 	var vecEixo[];
+ 	var deg2rad = this.degree * Math.PI / 180;
+ 	var vecEixo = [];
 
- 	switch(axis)
+ 	switch(this.axis)
  	{
  		case 'x':
  			vecEixo.push(1,0,0);
