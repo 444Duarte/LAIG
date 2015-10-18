@@ -109,6 +109,8 @@ MySceneGraph.prototype.parseInitials = function(rootElement) {
     if (reference == null )
         return "reference element missing in INITIALS";
     this.reference = this.reader.getFloat(reference[0], 'length', true);
+    if(this.reference < 0)
+        return "reference value in 'INITIALS' must be at least 0.";
 
 };
 
