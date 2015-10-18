@@ -82,7 +82,11 @@ MyNode.prototype.display = function(parentTexture, parentMaterial) {
  				return false;
  			}
  			if (currentMaterial != null) currentMaterial.apply();
- 			if (currentTexture != null) currentTexture.bind();
+ 			if (currentTexture != null) 
+ 				{
+ 					this.scene.leaves[this.descendants[i]].scaleTexCoords(currentTexture.s, currentTexture.t);
+ 					currentTexture.bind();
+ 				}
  			this.scene.leaves[this.descendants[i]].display();
  			if (currentTexture != null) currentTexture.unbind();
  			
