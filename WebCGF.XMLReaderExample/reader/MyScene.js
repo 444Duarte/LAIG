@@ -83,7 +83,7 @@ MyScene.prototype.onGraphLoaded = function ()
     this.camera.near = this.graph.frustum[0];
     this.camera.far = this.graph.frustum[1];
 
-    if (this.graph.reference > 0)
+    if (this.graph.reference >= 0)
 	   this.axis = new CGFaxis(this, this.graph.reference);
 	   
 	this.gl.clearColor(this.graph.backgroundLight[0],this.graph.backgroundLight[1],this.graph.backgroundLight[2],this.graph.backgroundLight[3]);
