@@ -34,66 +34,63 @@
 
 	<TEXTURES>
 	    <TEXTURE id="concrete">
-	        <file path="scenes/textures/concrete_texture.jpg" />                             
+	        <file path="textures/concrete_texture.jpg" />                             
 	        <amplif_factor s="1" t="1" />             
 	    </TEXTURE>
 
 	    <TEXTURE id="wood">
-	        <file path="scenes/textures/wood.jpg" />                  
+	        <file path="textures/wood.jpg" />                  
 	        <amplif_factor s="1" t="1" />            
 	    </TEXTURE>
 
 	    <TEXTURE id="wallpaper">
-	        <file path="scenes/textures/desktop_wallpaper.jpg" />                            
+	        <file path="textures/desktop_wallpaper.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="keyboard">
-	        <file path="scenes/textures/keyboard.jpg" />                            
+	        <file path="textures/keyboard.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="mouse">
-	        <file path="scenes/textures/mouse.jpg" />                            
+	        <file path="textures/mouse.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="front_tower">
-	        <file path="scenes/textures/tower_front.jpg" />                            
+	        <file path="textures/tower_front.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="left_tower">
-	        <file path="scenes/textures/side_tower.jpg" />                            
+	        <file path="textures/side_tower.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="chao">
-	        <file path="scenes/textures/floor.jpg" />                            
+	        <file path="textures/floor_v2.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="front_wall">
-	        <file path="scenes/textures/wallpaper.jpg" />                            
+	        <file path="textures/wall_v2.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="back_tower">
-	        <file path="scenes/textures/tower_back.jpg" />                            
+	        <file path="textures/tower_back.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="upper_tower">
-	        <file path="scenes/textures/tower_up.jpg" />                            
+	        <file path="textures/tower_up.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
-	    </TEXTURE>
-
-	    
+	    </TEXTURE> 
 
 	    <!-- NOTE: this block "TEXTURE" must be repeated as necessary with different "id" -->
 	    
 	</TEXTURES>
-
 
 	<MATERIALS>
 	    <MATERIAL id="brown">                                  
@@ -531,6 +528,7 @@
 	        <TRANSLATION x="1" y="0" z="0.5" />
 	        <TRANSLATION x="9" y="3.5" z="9" />
 	        <SCALE sx="0.25" sy="0.25" sz="0.4" />
+			<ROTATION axis="z" angle="270" />
 
 
 	        <!-- declaring descendents, ate least one node or one leaf must be present -->
@@ -543,7 +541,6 @@
 	    </NODE>
 
 	    <!--              CRIAR UMA TORRE             -->
-
 
 	    <NODE id="front torre">       <!--   defines one intermediate node; may be repeated as necessary -->
 
@@ -899,8 +896,7 @@
 
 	    </NODE>
 
-
-	    <!--              CRIAR UM TECLADO             -->
+	    <!--              CRIAR UM TECLADO E MONITOR         -->
 
 		<NODE id="keyboard wallpaper">       <!--   defines one intermediate node; may be repeated as necessary -->
 
@@ -997,7 +993,6 @@
 
 	    </NODE>
 
-
 	    <NODE id="teclado">       <!--   defines one intermediate node; may be repeated as necessary -->
 
 	        <!-- next two lines are mandatory -->
@@ -1052,7 +1047,7 @@
 	        <!-- next two lines are mandatory -->
 	        <MATERIAL id="null" />      <!-- declared material superimposes the material received from parent node -->
 	                                  <!-- id="null" maintains material from parent node        -->
-	        <TEXTURE id="wallpaper" />       <!-- declared texture superimposes the texture received from parent node -->
+	        <TEXTURE id="front_wall" />       <!-- declared texture superimposes the texture received from parent node -->
 	                                  <!-- id="null" maintains texture from parent node       -->
 	                                  <!-- id="clear" clears texture declaration received from parent node      -->
 
