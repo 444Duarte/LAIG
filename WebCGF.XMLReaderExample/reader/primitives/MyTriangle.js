@@ -85,8 +85,8 @@ MyTriangle.prototype.initBuffers = function() {
     this.texCoords = this.nonScaledTexCoords.slice(0);
 
     this.primitiveType=this.scene.gl.TRIANGLES;
-
-	this.initGLBuffers();
+    
+    this.initGLBuffers();
 };
 
 /**
