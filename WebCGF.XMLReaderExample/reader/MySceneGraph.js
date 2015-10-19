@@ -85,26 +85,31 @@ MySceneGraph.prototype.parseInitials = function(rootElement) {
     this.frustum[1] = this.reader.getFloat(frustum[0], 'far', true);
     console.log(this.frustum);
     
+    this.initialTransformations = [];
+
+
     var translate = initials.getElementsByTagName('translation');
     if (translate == null )
         return "translate element missing in INITIALS";
-    this.translate = this.parseTranslation(translate[0]);
+    this.initialTransformations['translation'] = this.parseTranslation(translate[0]);
+   
     
     var rotation = initials.getElementsByTagName('rotation');
     if (rotation.length != 3)
         return "rotation element in INITIALS not correct. Number of elements 'rotation' must be three.";
-    this.rotation = [];
+    var rotationArray = [];
     var rotation1 = this.parseRotation(rotation[0]);
-    this.rotation[0] = rotation1;
+    rotationArray[0] = rotation1;
     var rotation2 = this.parseRotation(rotation[1]);
-    this.rotation[1] = rotation2;
+    rotationArray[1] = rotation2;
     var rotation3 = this.parseRotation(rotation[2]);
-    this.rotation[2] = rotation3;
-    
+    rotationArray[2] = rotation3;
+    this.initialTransformations['rotation'] = rotationArray; 
+
     var scale = initials.getElementsByTagName('scale');
     if (scale == null )
         return "translate element missing in INITIALS";
-    this.scale = this.parseScale(scale[0]);
+    this.initialTransformations['scale'] = this.parseScale(scale[0]);
     
     var reference = initials.getElementsByTagName('reference');
     if (reference == null )

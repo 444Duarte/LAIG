@@ -83,7 +83,7 @@ MyScene.prototype.onGraphLoaded = function ()
     	console.log("loaded light id="+this.lights[i].id);
     	this.enabledLights[this.lights[i].id] = this.lights[i].enabled;
     }
-	
+	this.initialTransformations = this.graph.initialTransformations;
 	this.textures = this.graph.textures;
 	this.materials = this.graph.materials;
 	this.leaves = this.graph.leaves;
@@ -126,21 +126,33 @@ MyScene.prototype.display = function () {
     // it is important that things depending on the proper loading of the graph
     // only get executed after the graph has loaded correctly.
     // This is one possible way to do it
-    if (this.graph.loadedOk)
-    {
-        for(var i = 0; i < this.lights.length; i++){
-        	this.lights[i].update();	
-        }
-        
-        this.nodes[this.rootID].display();
+    if (this.graph.loadedOk){
+		this.applyInitTransformations();
+
+		for(var i = 0; i < this.lights.length; i++){
+			this.lights[i].update();	
+		}
+
+		this.nodes[this.rootID].display();
     }; 
 
     this.shader.unbind();
 };
 
-MyScene.prototype.setInterface = function(newInterface) {
+MyScene.prototype.setInterface= function(newInterface) {
 	this.interface = newInterface;
 }
+
+MyScene.prototype.applyInitTransformations= function(){
+	this.initialTransformations['translation'].apply();
+	
+	var rotation = this.initialTransformations['rotation'];
+	rotation[0].apply();
+	rotation[1].apply();
+	rotation[2].apply();
+
+	this.initialTransformations['scale'].apply();
+};
 
 
 MyScene.prototype.updateLight= function(lightID, state){
