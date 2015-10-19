@@ -22,7 +22,9 @@ function MySceneGraph(filename, scene) {
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
     
-    this.reader.open('scenes/' + filename, this);
+    this.fullFileName = 'scenes/' + filename;
+
+    this.reader.open(this.fullFileName, this);
 }
 
 /*
@@ -166,7 +168,7 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
         var file = textureNode[i].getElementsByTagName('file');
         if (file == null )
             return "'file' element missing in TEXTURE id = " + id;
-        var path = this.reader.getString(file[0], 'path', true);
+        var path = this.fullFileName.substring(0, this.fullFileName.lastIndexOf("/")) + '/' + this.reader.getString(file[0], 'path', true);
         
         var amplifFactor = textureNode[i].getElementsByTagName('amplif_factor');
         if (amplifFactor == null )
