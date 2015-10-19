@@ -78,7 +78,7 @@ MyNode.prototype.display = function(parentTexture, parentMaterial) {
  		{
  			if (this.scene.leaves[this.descendants[i]] == null)
  			{
- 				console.log("'DESCENDANT' id="+this.descendants[i]+" in 'NODE' id="+this.id+" isn't referenced as a 'NODE' or 'LEAF'.\n" );
+ 				console.error("'DESCENDANT' id="+this.descendants[i]+" in 'NODE' id="+this.id+" isn't referenced as a 'NODE' or 'LEAF'.\n" );
  				return false;
  			}
  			if (currentMaterial != null) currentMaterial.apply();
