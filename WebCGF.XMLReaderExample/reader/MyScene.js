@@ -128,7 +128,10 @@ MyScene.prototype.display = function () {
     // This is one possible way to do it
     if (this.graph.loadedOk)
     {
-        this.lights[0].update();
+        for(var i = 0; i < this.lights.length; i++){
+        	this.lights[i].update();	
+        }
+        
         this.nodes[this.rootID].display();
     }; 
 

@@ -83,6 +83,7 @@ MySceneGraph.prototype.parseInitials = function(rootElement) {
     this.frustum = [];
     this.frustum[0] = this.reader.getFloat(frustum[0], 'near', true);
     this.frustum[1] = this.reader.getFloat(frustum[0], 'far', true);
+    console.log(this.frustum);
     
     var translate = initials.getElementsByTagName('translation');
     if (translate == null )
@@ -255,7 +256,7 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
         this.lights[i].setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
         this.lights[i].setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
         this.lights[i].setSpecular(specular[0], specular[1], specular[2], specular[3]);
-        console.log("Light id="+this.lights[i]+" parsed");
+        console.log("Light id="+this.lights[i].id+" parsed");
     }
 }
 ;
@@ -426,7 +427,7 @@ MySceneGraph.prototype.parseNodeTexture = function(node) {
  */
 MySceneGraph.prototype.parseRectangle = function(node) {
     var args = this.reader.getString(node, 'args', true);
-    var coords = args.split(" ");
+    var coords = args.split(/\s+/);
     if (coords.length != 4)
         return this.onXMLError("number of arguments different of 4 in element args in 'LEAF' id= " + node.id);
     return new MyRectangle(this.scene,parseFloat(coords[0]),parseFloat(coords[1]),parseFloat(coords[2]),parseFloat(coords[3]));
@@ -440,7 +441,7 @@ MySceneGraph.prototype.parseRectangle = function(node) {
  */
 MySceneGraph.prototype.parseTriangle = function(node) {
     var args = this.reader.getString(node, 'args', true);
-    var coords = args.split(" ");
+    var coords = args.split(/\s+/);
     if (coords.length != 9)
         return this.onXMLError("number of arguments different of 9 in element args in 'LEAF' id= " + node.id);
     return new MyTriangle(this.scene,parseFloat(coords[0]),parseFloat(coords[1]),parseFloat(coords[2]),parseFloat(coords[3]),parseFloat(coords[4]),parseFloat(coords[5]),parseFloat(coords[6]),parseFloat(coords[7]),parseFloat(coords[8]));
@@ -454,7 +455,7 @@ MySceneGraph.prototype.parseTriangle = function(node) {
  */
 MySceneGraph.prototype.parseCylinder = function(node) {
     var args = this.reader.getString(node, 'args', true);
-    var coords = args.split(" ");
+    var coords = args.split(/\s+/);
     if (coords.length != 5)
         return this.onXMLError("number of arguments different of 5 in element args in 'LEAF' id= " + node.id);
     return new MyCylinder(this.scene,parseFloat(coords[0]),parseFloat(coords[1]),parseFloat(coords[2]),parseInt(coords[3]),parseInt(coords[4]));
@@ -468,7 +469,7 @@ MySceneGraph.prototype.parseCylinder = function(node) {
  */
 MySceneGraph.prototype.parseSphere = function(node) {
     var args = this.reader.getString(node, 'args', true);
-    var coords = args.split(" ");
+    var coords = args.split(/\s+/);
     if (coords.length != 3)
         return this.onXMLError("number of arguments different of 3 in element args in 'LEAF' id= " + node.id);
     return new MySphere(this.scene,parseFloat(coords[0]),parseInt(coords[1]),parseInt(coords[2]));

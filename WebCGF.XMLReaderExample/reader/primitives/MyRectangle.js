@@ -67,10 +67,10 @@ MyRectangle.prototype.initBuffers = function () {
 /**
  * Scales the texCoords according to the s and t amplification factor, 2 at a time.
  */
-MyRectangle.prototype.scaleTexCoords = function(ampS, ampT) {
+MyRectangle.prototype.scaleTexCoords = function(amplifS, amplifT) {
 	for (var i = 0; i < this.texCoords.length; i = i + 2) {
-		this.texCoords[i] = this.nonScaledTexCoords[i] / ampS;
-		this.texCoords[i + 1] = this.nonScaledTexCoords[i+1] / ampT;
+		this.texCoords[i] = this.nonScaledTexCoords[i] / amplifS;
+		this.texCoords[i + 1] = this.nonScaledTexCoords[i+1] / amplifT;
 	}
 
 	this.updateTexCoordsGLBuffers();
