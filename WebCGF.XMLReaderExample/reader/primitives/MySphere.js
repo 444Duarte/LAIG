@@ -2,6 +2,7 @@
  * Constructor MySphere
  * @constructor
  * @param scene - The scene
+ * @param {number} radius - radius of the sphere
  * @param {number} slices - parts along radius
  * @param {number} stacks - parts per section
  */
