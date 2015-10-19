@@ -35,10 +35,9 @@
  	this.normals = [];
 	this.indices = [];
 	this.texCoords = [];
-    var alpha = (2*Math.PI)/this.slices;
-    var beta = (Math.PI)/this.stacks;
-
-
+	
+	var beta = (2*Math.PI)/this.slices;
+    var alpha = (Math.PI)/this.stacks;
 
 	for (var stack = 0; stack < this.stacks + 1; ++stack) {
 		for (var slice = 0; slice <= this.slices; ++slice) {
@@ -54,6 +53,7 @@
 			this.indices.push(stack * (this.slices + 1) + slice, (stack + 1) * (this.slices + 1) + slice + 1, stack * (this.slices + 1) + slice + 1);
 		}
 	}
+
 	
 	
  	this.primitiveType = this.scene.gl.TRIANGLES;

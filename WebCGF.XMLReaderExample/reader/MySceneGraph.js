@@ -83,6 +83,7 @@ MySceneGraph.prototype.parseInitials = function(rootElement) {
     this.frustum = [];
     this.frustum[0] = this.reader.getFloat(frustum[0], 'near', true);
     this.frustum[1] = this.reader.getFloat(frustum[0], 'far', true);
+    console.log(this.frustum);
     
     var translate = initials.getElementsByTagName('translation');
     if (translate == null )
@@ -255,7 +256,7 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
         this.lights[i].setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
         this.lights[i].setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
         this.lights[i].setSpecular(specular[0], specular[1], specular[2], specular[3]);
-        console.log("Light id="+this.lights[i]+" parsed");
+        console.log("Light id="+this.lights[i].id+" parsed");
     }
 }
 ;
