@@ -545,20 +545,9 @@ MySceneGraph.prototype.parseLightPosition = function(node, element, nodeName) {
     var position = [];
     
     position[0] = this.reader.getFloat(element[0], 'x', true);
-    if (position[0] > 255 || position[0] < 0)
-        return this.onXMLError("'x' attribute in '" + element + "' must be between 0 and 255.");
-    
-    position[1] = this.reader.getFloat(element[0], 'y', true);
-    if (position[1] > 255 || position[1] < 0)
-        return this.onXMLError("'y' attribute in '" + element + "' must be between 0 and 255.");
-    
-    position[2] = this.reader.getFloat(element[0], 'z', true);
-    if (position[2] > 255 || position[2] < 0)
-        return this.onXMLError("'z' attribute in '" + element + "' must be between 0 and 255.");
-    
+    position[1] = this.reader.getFloat(element[0], 'y', true);    
+    position[2] = this.reader.getFloat(element[0], 'z', true);    
     position[3] = this.reader.getFloat(element[0], 'w', true);
-    if (position[3] > 1 || position[3] < 0)
-        return this.onXMLError("'w' attribute in '" + element + "' must be between 0 and 1.");
     
     return position;
 }
