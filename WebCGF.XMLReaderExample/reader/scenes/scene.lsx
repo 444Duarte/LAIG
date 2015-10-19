@@ -34,57 +34,57 @@
 
 	<TEXTURES>
 	    <TEXTURE id="concrete">
-	        <file path="scenes/textures/concrete_texture.jpg" />                             
+	        <file path="textures/concrete_texture.jpg" />                             
 	        <amplif_factor s="1" t="1" />             
 	    </TEXTURE>
 
 	    <TEXTURE id="wood">
-	        <file path="scenes/textures/wood.jpg" />                  
+	        <file path="textures/wood.jpg" />                  
 	        <amplif_factor s="1" t="1" />            
 	    </TEXTURE>
 
 	    <TEXTURE id="wallpaper">
-	        <file path="scenes/textures/desktop_wallpaper.jpg" />                            
+	        <file path="textures/desktop_wallpaper.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="keyboard">
-	        <file path="scenes/textures/keyboard.jpg" />                            
+	        <file path="textures/keyboard.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="mouse">
-	        <file path="scenes/textures/mouse.jpg" />                            
+	        <file path="textures/mouse.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="front_tower">
-	        <file path="scenes/textures/tower_front.jpg" />                            
+	        <file path="textures/tower_front.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="left_tower">
-	        <file path="scenes/textures/side_tower.jpg" />                            
+	        <file path="textures/side_tower.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="chao">
-	        <file path="scenes/textures/floor_v2.jpg" />                            
+	        <file path="textures/floor_v2.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="front_wall">
-	        <file path="scenes/textures/wall_v2.jpg" />                            
+	        <file path="textures/wall_v2.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="back_tower">
-	        <file path="scenes/textures/tower_back.jpg" />                            
+	        <file path="textures/tower_back.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE>
 
 	    <TEXTURE id="upper_tower">
-	        <file path="scenes/textures/tower_up.jpg" />                            
+	        <file path="textures/tower_up.jpg" />                            
 	        <amplif_factor s="1" t="1" />               
 	    </TEXTURE> 
 
