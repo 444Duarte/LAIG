@@ -46,7 +46,7 @@ MyCylinder.prototype.initBuffers = function() {
  			// normais
  			this.vertices.push((this.bRad + (radius * stack))*Math.cos(slice*angulo),(this.bRad + (radius * stack))*Math.sin(slice*angulo),stack/this.stacks);
  			this.normals.push(Math.cos(slice*angulo),Math.sin(slice*angulo),0);
- 			this.texCoords.push(slice/this.slices, 1-stack/this.stacks);
+ 			this.texCoords.push(slice/this.slices, stack/this.stacks);
  		}
  	}
 

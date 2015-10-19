@@ -5,9 +5,10 @@
  * @param {number} slices - parts along radius
  * @param {number} stacks - parts per section
  */
- function MySphere(scene, slices, stacks) {
+ function MySphere(scene, radius, slices, stacks) {
  	CGFobject.call(this,scene);
 	
+	this.radius = radius;
 	this.slices=slices;
 	this.stacks=stacks;
 
@@ -36,32 +37,22 @@
     var alpha = (2*Math.PI)/this.slices;
     var beta = (Math.PI)/this.stacks;
 
-	for (var stack = 0; stack < (this.stacks+1); ++stack) {
-	    if(stack == this.stacks){
-            this.vertices.push (0,0,1);
-            this.normals.push(0,0,1);
-            this.texCoords.push(0.5, 0.5);
-	    }else {
-	        for (var slice = 0; slice < this.slices + 1; ++slice) {
- 		    this.vertices.push(Math.cos(slice*alpha)*Math.cos(stack*beta), Math.sin(slice*alpha)*Math.cos(stack*beta), Math.sin(stack*beta));
-	 	    this.normals.push(Math.cos(slice*alpha)*Math.cos(stack*beta), Math.sin(slice*alpha)*Math.cos(stack*beta), Math.sin(stack*beta));
-	 	    this.texCoords.push(slice/this.slices, stack/this.stacks);
-	        }
-	 	}
+
+
+	for (var stack = 0; stack < this.stacks + 1; ++stack) {
+		for (var slice = 0; slice <= this.slices; ++slice) {
+			this.vertices.push(this.radius * Math.sin(stack * alpha) * Math.cos(slice * beta), this.radius * Math.sin(stack * alpha) * Math.sin(slice * beta), this.radius * Math.cos(stack * alpha));
+			this.normals.push(Math.sin(stack * alpha) * Math.cos(slice * beta), Math.sin(stack * alpha) * Math.sin(slice * beta), Math.cos(stack * alpha));
+			this.texCoords.push(slice/this.slices, stack/this.stacks);
+		}
 	}
 
  	for (var stack = 0; stack < this.stacks; ++stack) {
- 		if(stack == this.stacks-1){
-			for(var slice = 0; slice < this.slices; ++slice){
-				this.indices.push(stack * this.slices + slice, stack * this.slices + (slice + 1) % this.slices, this.stacks*this.slices)
-			}
- 		}else{
-			for (var slice = 0; slice < this.slices; ++slice) {
-				this.indices.push(stack * this.slices + slice, stack * this.slices + (slice + 1) % this.slices, (stack + 1) * this.slices + (slice + 1) % this.slices);
-				this.indices.push(stack * this.slices + slice, (stack + 1) * this.slices + (slice + 1) % this.slices, (stack + 1) * this.slices + slice);
-			}
- 		}
- 	}
+		for (var slice = 0; slice < this.slices; ++slice) {
+			this.indices.push(stack * (this.slices + 1) + slice, (stack + 1) * (this.slices + 1) + slice, (stack + 1) * (this.slices + 1) + slice + 1);
+			this.indices.push(stack * (this.slices + 1) + slice, (stack + 1) * (this.slices + 1) + slice + 1, stack * (this.slices + 1) + slice + 1);
+		}
+	}
 	
 	
  	this.primitiveType = this.scene.gl.TRIANGLES;
